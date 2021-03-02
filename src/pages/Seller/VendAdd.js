@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { useState } from 'react'
 
 //FAZER CSS VENDEDORADD
 
@@ -8,45 +8,51 @@ import '../../styles/pages/vendadd.css'
 
 import Sidebar from '../../components/Sidebar/sidebar.jsx';
 
-class VendAdd extends Component {
-	constructor(props) {
-		super(props)
 
-		this.state = {
-			matricula: '',
-			nome: '',
-			email: '',
-			crpsenha: ''
+
+function initialState() {
+	return { matricula: '',
+	 		nome: '',
+	 		email: '',
+			crpsenha: '', 		
+			crpsenhax:'' }
+  }
+
+const VenAdd = () => {
+	const [values, setValues] = useState(initialState)
+
+	function onSubmit(event){
+		event.preventDefault();
+		if(values.crpsenha !== values.crpsenhax){
+			alert('Digita uma senha igual o nóia')
+		}else{
+			axios
+				.post('https://sistemaifrj.herokuapp.com/vendedores/', values)
+				.then(response => {
+					console.log(response)
+				})
+				.catch(error => {
+					console.log(error)
+				})
 		}
 	}
 
-	changeHandler = e => {
-		this.setState({ [e.target.name]: e.target.value })
+	function OnChange(event) {	
+		const { value, name } = event.target;
+		setValues({
+			...values,
+			[name]: value
+		});
 	}
 
-	submitHandler = e => {
-		e.preventDefault()
-		console.log(this.state)
-		axios
-			.post('https://sistemaifrj.herokuapp.com/vendedores/', this.state)
-			.then(response => {
-				console.log(response)
-			})
-			.catch(error => {
-				console.log(error)
-			})
-	}
 
-	render() {
-		const { matricula, nome, email, crpsenha  } = this.state
-		return (
-			
+	return (
 
-			<div>
+		<div>
 
 				<Sidebar/>
 
-				<form onSubmit={this.submitHandler} className="form_addVend">
+				<form onSubmit={onSubmit} className="form_addVend">
 				
 					<div className="inputVendNome">
 					
@@ -54,8 +60,8 @@ class VendAdd extends Component {
 							type="text"
 							name="nome"
 							placeholder="Nome Completo"
-							value={nome}
-							onChange={this.changeHandler}
+							value={values.nome}
+							onChange={OnChange}
 						/>
 					</div>
 					<div className="inputVendEmail">
@@ -64,8 +70,8 @@ class VendAdd extends Component {
 							type="text"
 							name="email"
 							placeholder="E-mail"
-							value={email}
-							onChange={this.changeHandler}
+							value={values.email}
+							onChange={OnChange}
 						/>
 					</div>
 					<div className="inputVendMatricula">
@@ -74,8 +80,8 @@ class VendAdd extends Component {
 							type="text"
 							name="matricula"
 							placeholder="Matrícula"
-							value={matricula}
-							onChange={this.changeHandler}
+							value={values.matricula}
+							onChange={OnChange}
 						/>
 					</div>
 					
@@ -86,8 +92,8 @@ class VendAdd extends Component {
 							type="password"
 							name="crpsenha"
 							placeholder="Senha"
-							value={crpsenha}
-							onChange={this.changeHandler}
+							value={values.crpsenha}
+							onChange={OnChange}
 						/>
 					</div>
 					<div className="inputVendSenhaConfirmar">
@@ -95,7 +101,8 @@ class VendAdd extends Component {
 							type="password"
 							name="crpsenhax"
 							placeholder="Confirmar Senha"
-							
+							value={values.crpsenhax}
+							onChange={OnChange}
 						/>
 					</div>
 					
@@ -103,8 +110,9 @@ class VendAdd extends Component {
 					<button type="submit" className="btnAddVendLimpar">Limpar</button>
 				</form>
 			</div>
-		)
-	}
+	)
+
 }
 
-export default VendAdd
+
+export default VenAdd

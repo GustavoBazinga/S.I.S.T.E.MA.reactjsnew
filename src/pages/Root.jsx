@@ -8,22 +8,24 @@ import StoreProvider from 'components/Store/Provider';
 import RoutesPrivate from 'components/Routes/Private/Private';
 import Home from './Home/Home';
 import Login from './Login/Login';
-import PostForm from './Admin/AdminAdd.js'
+import AdminAdd from './Admin/AdminAdd.js'
 import AdminAlt from './Admin/AdminAlt.js'
 import CartaoAdd from './Card/CartaoAdd.js'
 import ProAdd from './Products/ProAdd.js'
-import VendAdd from './Seller/VendAdd.js'
+import VenAdd from './Seller/VendAdd.js'
+import CartaoAlt from './Card/CartaoAlt.js'
 
 const PagesRoot = () => (
   <Router>
     <StoreProvider>
       <Switch>
         <Route path="/login" component={Login} />
-        <RoutesPrivate path="/admin/add" component={PostForm} />
+        <RoutesPrivate path="/admin/add" component={AdminAdd} />
         <RoutesPrivate path="/admin/alt" component={AdminAlt} />
         <RoutesPrivate path="/cartao/add" component={CartaoAdd} />
+        <RoutesPrivate path="/cartao/alt" component={CartaoAlt} />
         <RoutesPrivate path="/produto/add" component={ProAdd} />
-        <RoutesPrivate path="/vendedor/add" component={VendAdd} />
+        <RoutesPrivate path="/vendedor/add" component={VenAdd} />
         <RoutesPrivate path="/" component={Home} />
       </Switch>
     </StoreProvider>

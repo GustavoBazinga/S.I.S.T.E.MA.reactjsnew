@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { Component, useState } from 'react'
 
 import '../../styles/pages/adminadd.css'
 
@@ -6,31 +6,25 @@ import axios from 'axios'
 
 import Sidebar from '../../components/Sidebar/sidebar.jsx';
 
-class PostForm extends Component {
-	constructor(props) {
-		super(props)
 
-		this.state = {
-			login: '',
-			nome: '',
-			email: '',
-			crpsenha: '',
-			crpsenhax: ''
-		}
-	}
+function initialState() {
+	return { login: '',
+	 		nome: '',
+	 		email: '',
+			crpsenha: '', 		
+			crpsenhax:'' }
+  }
 
-	changeHandler = e => {
-		this.setState({ [e.target.name]: e.target.value })
-	}
+const AdminAdd = ()  => {
+	const [values, setValues] = useState(initialState)
 
-	submitHandler = e => {
-		e.preventDefault()
-		if(this.state.crpsenha !== this.state.crpsenhax){
+	function onSubmit(event){
+		event.preventDefault();
+		if(values.crpsenha !== values.crpsenhax){
 			alert('Digita uma senha igual o nóia')
 		}else{
-			console.log(this.state)
 			axios
-				.post('https://sistemaifrj.herokuapp.com/admins/', this.state)
+				.post('https://sistemaifrj.herokuapp.com/admins/', values)
 				.then(response => {
 					console.log(response)
 				})
@@ -38,19 +32,23 @@ class PostForm extends Component {
 					console.log(error)
 				})
 		}
-		
 	}
 
-	render() {
-		const { login, nome, email, crpsenha, crpsenhax  } = this.state
-		return (
-			
 
-			<div>
+	function OnChange(event) {	
+		const { value, name } = event.target;
+		setValues({
+			...values,
+			[name]: value
+		});
+	}
+
+	return(
+		<div>
 
 				<Sidebar/>
 
-				<form onSubmit={this.submitHandler} className="form_addAdmin" name="FormAdmAdd">
+				<form onSubmit={onSubmit} className="form_addAdmin" name="FormAdmAdd">
 				
 					<div className="inputAdmNome">
 					
@@ -58,8 +56,8 @@ class PostForm extends Component {
 							type="text"
 							name="nome"
 							placeholder="Nome Completo"
-							value={nome}
-							onChange={this.changeHandler}
+							value={values.nome}
+							onChange={OnChange}
 						/>
 					</div>
 					<div className="inputAdmEmail">
@@ -68,8 +66,8 @@ class PostForm extends Component {
 							type="text"
 							name="email"
 							placeholder="E-mail"
-							value={email}
-							onChange={this.changeHandler}
+							value={values.email}
+							onChange={OnChange}
 						/>
 					</div>
 					<div className="inputAdmLogin">
@@ -78,8 +76,8 @@ class PostForm extends Component {
 							type="text"
 							name="login"
 							placeholder="Login"
-							value={login}
-							onChange={this.changeHandler}
+							value={values.login}
+							onChange={OnChange}
 						/>
 					</div>
 					
@@ -90,8 +88,8 @@ class PostForm extends Component {
 							type="password"
 							name="crpsenha"
 							placeholder="Senha"
-							value={crpsenha}
-							onChange={this.changeHandler}
+							value={values.crpsenha}
+							onChange={OnChange}
 						/>
 					</div>
 					<div className="inputAdmSenhaConfirmar">
@@ -99,8 +97,8 @@ class PostForm extends Component {
 							type="password"
 							name="crpsenhax"
 							placeholder="Confirmar Senha"
-							value={crpsenhax}
-							onChange={this.changeHandler}
+							value={values.crpsenhax}
+							onChange={OnChange}
 						/>
 					</div>
 					
@@ -108,8 +106,9 @@ class PostForm extends Component {
 					<button type="submit" className="btnAddAdmLimpar">Limpar</button>
 				</form>
 			</div>
-		)
-	}
+
+	)
 }
 
-export default PostForm
+
+export default AdminAdd

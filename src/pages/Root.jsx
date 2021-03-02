@@ -12,6 +12,7 @@ import AdminAdd from './Admin/AdminAdd.js'
 import AdminAlt from './Admin/AdminAlt.js'
 import CartaoAdd from './Card/CartaoAdd.js'
 import ProAdd from './Products/ProAdd.js'
+import ProAlt from './Products/ProAlt.js'
 import VenAdd from './Seller/VendAdd.js'
 import CartaoAlt from './Card/CartaoAlt.js'
 
@@ -25,7 +26,9 @@ const PagesRoot = () => (
         <RoutesPrivate path="/cartao/add" component={CartaoAdd} />
         <RoutesPrivate path="/cartao/alt" component={CartaoAlt} />
         <RoutesPrivate path="/produto/add" component={ProAdd} />
+        <RoutesPrivate path="/produto/alt" component={ProAlt} />
         <RoutesPrivate path="/vendedor/add" component={VenAdd} />
+
         <RoutesPrivate path="/" component={Home} />
       </Switch>
     </StoreProvider>

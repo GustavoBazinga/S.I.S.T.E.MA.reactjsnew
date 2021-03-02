@@ -1,0 +1,163 @@
+.form_addAdmin{
+  position: absolute;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  
+}
+.inputAdmLogin{
+  display: flex;  
+    align-items: center;
+    border-bottom: 1px solid black;
+
+    padding: 1px;
+    width: 151%;
+    height: 30px;
+ 
+    margin-top: 6%;
+    margin-left: 150%;
+    
+}
+.inputAdmLogin input{
+  background: transparent;
+    width: 100%;
+    outline-width: 0;
+    color:  black;
+    border: none;
+    font: 600 17px Nunito, sans-serif;
+    margin-left: 2px;
+    margin-right: 10px;
+}
+.inputAdmNome{
+  display: flex;  
+    align-items: center;
+    border-bottom: 1px solid black;
+    border-color:#303030;
+    padding: 1px;
+    width: 320%;
+    height: 30px;
+ 
+    margin-top: 70%;
+    margin-left: 150%;
+        
+}
+.inputAdmNome input{
+  background: transparent;
+    width: 100%;
+    outline-width: 0;
+    color:  black;
+    border: none;
+    font: 600 17px Nunito, sans-serif;
+    margin-left: 2px;
+    margin-right: 10px;
+}
+.inputAdmEmail{
+  display: flex;  
+    align-items: center;
+    border-bottom: 1px solid black;
+
+    padding: 1px;
+    width: 151%;
+    height: 30px;
+ 
+    margin-top: 30%;
+    margin-left: 150%;
+     
+}
+.inputAdmEmail input{
+  background: transparent;
+    width: 100%;
+    outline-width: 0;
+    color:  black;
+    border: none;
+    font: 600 17px Nunito, sans-serif;
+    margin-left: 2px;
+    margin-right: 10px;
+}
+.inputAdmSenha{
+  display: flex;  
+    align-items: center;
+    border-bottom: 1px solid black;
+
+    padding: 1px;
+    width: 151%;
+    height: 30px;
+ 
+    margin-top: -34%;
+    margin-left: 320%;
+     
+}
+.inputAdmSenha input{
+  background: transparent;
+    width: 100%;
+    outline-width: 0;
+    color:  black;
+    border: none;
+    font: 600 17px Nunito, sans-serif;
+    margin-left: 2px;
+    margin-right: 10px;
+}
+.inputAdmSenhaConfirmar{
+  display: flex;  
+    align-items: center;
+    border-bottom: 1px solid black;
+
+    padding: 1px;
+    width: 151%;
+    height: 30px;
+ 
+    margin-top: 6%;
+    margin-left: 320%;
+}
+.inputAdmSenhaConfirmar input{
+  background: transparent;
+    width: 100%;
+    outline-width: 0;
+    color:  black;
+    border: none;
+    font: 600 17px Nunito, sans-serif;
+    margin-left: 2px;
+    margin-right: 10px;
+}
+.btnAddAdm{
+  display: flex;  
+    align-items: center;
+    justify-content: center;
+    border-bottom: 1px solid;
+    border-color:#070707;
+    background-color: #070707;
+    color: #ffffff;
+    padding: 1px;
+    width: 55%;
+    border-radius: 5px;
+    height: 40px;
+    font: 600 17px Nunito, sans-serif;
+    margin-top: 30%;
+    margin-left: 415%;    
+}
+.btnAddAdmLimpar{
+  display: flex;  
+  align-items: center;
+  justify-content: center;
+  border-bottom: 0px solid;
+  font: 600 17px Nunito, sans-serif;
+  border-color:#ffffff;
+  background-color:#ffffff;
+  color: #070707;
+  padding: 1px;
+  width: 55%;
+  border-radius: 5px;
+  height: 40px;
+
+  margin-top: -19%;
+  margin-left: 319%;
+  border-right: #ffffff;
+}
+.btnAddAdmLimpar:hover{
+  background-color: #adadad;
+}
+.btnAddAdm:hover{
+  background-color: #5f985e;
+  border-color: #5f985e;
+  border-right: #5f985e;
+}

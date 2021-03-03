@@ -6,7 +6,7 @@ import axios from 'axios'
 
 import '../../styles/pages/vendadd.css'
 
-import Sidebar from '../../components/Sidebar/sidebar.jsx';
+import Sidebar from '../../components/Sidebar/Sidebar.jsx';
 
 
 

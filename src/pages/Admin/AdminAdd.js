@@ -1,114 +1,109 @@
-import React, { Component, useState } from 'react'
+import React, { Component, useState, useContext } from "react";
 
-import '../../styles/pages/adminadd.css'
+import StoreContext from "../../components/Store/Context";
 
-import axios from 'axios'
+import "../../styles/pages/adminadd.css";
 
-import Sidebar from '../../components/Sidebar/sidebar.jsx';
+import axios from "axios";
 
+import Sidebar from "../../components/Sidebar/Sidebar.jsx";
 
 function initialState() {
-	return { login: '',
-	 		nome: '',
-	 		email: '',
-			crpsenha: '', 		
-			crpsenhax:'' }
-  }
-
-const AdminAdd = ()  => {
-	const [values, setValues] = useState(initialState)
-
-	function onSubmit(event){
-		event.preventDefault();
-		if(values.crpsenha !== values.crpsenhax){
-			alert('Digita uma senha igual o nóia')
-		}else{
-			axios
-				.post('https://sistemaifrj.herokuapp.com/admins/', values)
-				.then(response => {
-					console.log(response)
-				})
-				.catch(error => {
-					console.log(error)
-				})
-		}
-	}
-
-
-	function OnChange(event) {	
-		const { value, name } = event.target;
-		setValues({
-			...values,
-			[name]: value
-		});
-	}
-
-	return(
-		<div>
-
-				<Sidebar/>
-
-				<form onSubmit={onSubmit} className="form_addAdmin" name="FormAdmAdd">
-				
-					<div className="inputAdmNome">
-					
-						<input
-							type="text"
-							name="nome"
-							placeholder="Nome Completo"
-							value={values.nome}
-							onChange={OnChange}
-						/>
-					</div>
-					<div className="inputAdmEmail">
-				
-						<input
-							type="text"
-							name="email"
-							placeholder="E-mail"
-							value={values.email}
-							onChange={OnChange}
-						/>
-					</div>
-					<div className="inputAdmLogin">
-						
-						<input
-							type="text"
-							name="login"
-							placeholder="Login"
-							value={values.login}
-							onChange={OnChange}
-						/>
-					</div>
-					
-
-					
-					<div className="inputAdmSenha">
-						<input
-							type="password"
-							name="crpsenha"
-							placeholder="Senha"
-							value={values.crpsenha}
-							onChange={OnChange}
-						/>
-					</div>
-					<div className="inputAdmSenhaConfirmar">
-						<input
-							type="password"
-							name="crpsenhax"
-							placeholder="Confirmar Senha"
-							value={values.crpsenhax}
-							onChange={OnChange}
-						/>
-					</div>
-					
-					<button type="submit" className="btnAddAdm">Salvar</button>
-					<button type="submit" className="btnAddAdmLimpar">Limpar</button>
-				</form>
-			</div>
-
-	)
+  return { login: "", nome: "", email: "", crpsenha: "", crpsenhax: "" };
 }
 
+const AdminAdd = () => {
+  const [values, setValues] = useState(initialState);
+  const { token, setToken } = useContext(StoreContext);
+  var tokenmineaspas = JSON.stringify(token).replace(/['"]+/g, "");
 
-export default AdminAdd
+  function ResetToken(event) {
+    setToken(null);
+  }
+  function onSubmit(event) {
+    event.preventDefault();
+    if (values.crpsenha !== values.crpsenhax) {
+      alert("Digita uma senha igual o nóia");
+    } else {
+      axios
+        .post("https://sistemaifrj.herokuapp.com/admins/", values)
+        .then((response) => {
+          console.log(response);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
+  }
+
+  function OnChange(event) {
+    const { value, name } = event.target;
+    setValues({
+      ...values,
+      [name]: value,
+    });
+  }
+
+  return (
+    <div>
+      <Sidebar />
+      <form onSubmit={onSubmit} className="form_addAdmin" name="FormAdmAdd">
+        <div className="inputAdmNome">
+          <input
+            type="text"
+            name="nome"
+            placeholder="Nome Completo"
+            value={values.nome}
+            onChange={OnChange}
+          />
+        </div>
+        <div className="inputAdmEmail">
+          <input
+            type="text"
+            name="email"
+            placeholder="E-mail"
+            value={values.email}
+            onChange={OnChange}
+          />
+        </div>
+        <div className="inputAdmLogin">
+          <input
+            type="text"
+            name="login"
+            placeholder="Login"
+            value={values.login}
+            onChange={OnChange}
+          />
+        </div>
+
+        <div className="inputAdmSenha">
+          <input
+            type="password"
+            name="crpsenha"
+            placeholder="Senha"
+            value={values.crpsenha}
+            onChange={OnChange}
+          />
+        </div>
+        <div className="inputAdmSenhaConfirmar">
+          <input
+            type="password"
+            name="crpsenhax"
+            placeholder="Confirmar Senha"
+            value={values.crpsenhax}
+            onChange={OnChange}
+          />
+        </div>
+
+        <button type="submit" className="btnAddAdm">
+          Salvar
+        </button>
+        <button type="submit" className="btnAddAdmLimpar">
+          Limpar
+        </button>
+      </form>
+    </div>
+  );
+};
+
+export default AdminAdd;

@@ -6,7 +6,7 @@ import {FaUserCircle} from 'react-icons/fa';
 
 import { Link } from 'react-router-dom';
 
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 
 import {AiOutlineMenu, AiOutlineClose, AiOutlineShop, AiOutlineShopping, AiOutlineUser} from 'react-icons/ai';
 
@@ -18,12 +18,17 @@ import {BiLogOutCircle} from 'react-icons/bi'
 
 import '../../styles/components/sidebar.css'
 
+import StoreContext from 'components/Store/Context';
+
 
 function Sidebar(){
-
+  const { token, setToken } = useContext(StoreContext)
 
   const [collapsed, setCollapsed] = useState(true);
 
+  function signOut(event){
+    setToken(null)
+  }
 
   return(
     
@@ -104,9 +109,9 @@ function Sidebar(){
                   </MenuItem>
                
                 <SidebarFooter className="footerSideBar">
-                  <MenuItem icon={<BiLogOutCircle size="25px" />}>
+                  <MenuItem icon={<BiLogOutCircle size="25px" onClick={signOut}/>}>
                           
-                    <Link to="/authentication"/>
+                    {/* <Link to="/login"/ > */}
                   </MenuItem>
 
                  

@@ -59,6 +59,7 @@ const UserLogin = () => {
   const [error, setError] = useState(null); //Erro retornado.
   const { setToken } = useContext(StoreContext); //Função para estabelecer Token Global com Context.
   const history = useHistory(); //Paginação.
+  
 
   //Função onChange atualiza dados dos campos.
   function onChange(event) {

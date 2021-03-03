@@ -4,7 +4,7 @@ import "../../styles/pages/productadd.css";
 
 import axios from "axios";
 
-import Sidebar from "../../components/Sidebar/sidebar.jsx";
+import Sidebar from "../../components/Sidebar/Sidebar.jsx";
 
 function initialState() {
   return {

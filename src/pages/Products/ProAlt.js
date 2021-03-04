@@ -52,7 +52,7 @@ const ProAlt = () => {
 			['nome']: valueNome,
 			['estoque']: valueEstoque,
 			['categoria']: valueCategoria,
-      ['preco']: valuePreco
+      		['preco']: valuePreco
 		});
 		
 	}

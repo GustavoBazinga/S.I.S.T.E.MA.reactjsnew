@@ -47,26 +47,13 @@ const CartaoAlt = () => {
 	  }
 
 	function OnFound({valueNome, valueMatricula, valueEmail, valueSaldo }){
-		setValues({
-			...values,
-			['nome']: valueNome,
-			['matricula']: valueMatricula,
-			['email']: valueEmail,
-      ['saldo']: valueSaldo
-		});
+		setValues(initialState);
 		
 	}
 
 
 	function clearMan(){
-		setValues({
-			...values,
-			['nome']: '',
-			['matricula']: '',
-			['email']: '',
-			['matricula2']: '',
-			['saldo']: ''
-		});
+		setValues(clearMan);
 		document.getElementById('matricula2AltCartao').disabled = false
 		document.getElementById('nomeAltCartao').disabled=true
 		document.getElementById('emailAltCartao').disabled=true

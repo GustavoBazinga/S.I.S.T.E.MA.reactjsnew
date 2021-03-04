@@ -31,6 +31,8 @@ box-shadow: 5px 4px 4px rgba(0, 0, 0, 0.5);
   font: 600 55px Nunito, sans-serif;  
   top:5%;
 }
+
+
 #page-login .input-login{
     display: flex;  
     align-items: center;
@@ -43,6 +45,9 @@ box-shadow: 5px 4px 4px rgba(0, 0, 0, 0.5);
     margin-top: 20%;
     margin-right: 10px;
 }
+
+
+
 #page-login .input-password{
   display: flex;
     align-items: center;
@@ -62,7 +67,11 @@ box-shadow: 5px 4px 4px rgba(0, 0, 0, 0.5);
     border: none;
     font: 600 17px Nunito, sans-serif;
     margin-left: 12px;
-    margin-right: 10px;      
+    margin-right: 10px;    
+    transition: all .3s ease-out;
+    -webkit-transition: all .3s ease-out;
+    -moz-transition: all .3s ease-out;
+    -webkit-appearance:none;  
 }
 
 
@@ -76,7 +85,7 @@ box-shadow: 5px 4px 4px rgba(0, 0, 0, 0.5);
     font: 600 17px Nunito, sans-serif;
     margin-left: 12px;
     margin-right: 10px;
-}
+}  
 
 #page-login .enter-app{
   width: 50%;
@@ -101,8 +110,10 @@ box-shadow: 5px 4px 4px rgba(0, 0, 0, 0.5);
   flex-direction: column;
   background:  #F0F0F0;;
   border-radius: 20px;
+  box-shadow: 0 10px 25x rgba(92,99,105,.2);
   width: 350px;
   height: 350px;
+
 }
 
 #page-login .enter-app{
@@ -165,4 +176,5 @@ margin-bottom: -130px;
 }
 .user-login__error {
   color: red;
-}
+} 
+

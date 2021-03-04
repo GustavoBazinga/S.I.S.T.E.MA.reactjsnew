@@ -1,6 +1,7 @@
-import React, { Component, useState, useContext } from "react";
+import React, { useState } from "react";
+//import {useContext} from 'react'
 
-import StoreContext from "../../components/Store/Context";
+//import StoreContext from "../../components/Store/Context";
 
 import "../../styles/pages/adminadd.css";
 
@@ -14,12 +15,9 @@ function initialState() {
 
 const AdminAdd = () => {
   const [values, setValues] = useState(initialState);
-  const { token, setToken } = useContext(StoreContext);
-  var tokenmineaspas = JSON.stringify(token).replace(/['"]+/g, "");
+  //const {token} = useContext(StoreContext); 
+  //var tokenmineaspas = JSON.stringify(token).replace(/['"]+/g, "");
 
-  function ResetToken(event) {
-    setToken(null);
-  }
   function onSubmit(event) {
     event.preventDefault();
     if (values.crpsenha !== values.crpsenhax) {

@@ -59,14 +59,7 @@ const ProAlt = () => {
 
 
 	function clearMan(){
-		setValues({
-			...values,
-			['nome']: '',
-			['estoque']: '',
-			['categoria']: '',
-			['nome2']: '',
-			['preco']: ''
-		});
+		setValues(initialState);
 		document.getElementById('nome2AltProduct').disabled = false
 		document.getElementById('nomeAltProduct').disabled=true
 		document.getElementById('categoriaAltProduct').disabled=true

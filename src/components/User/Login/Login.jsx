@@ -17,7 +17,7 @@ function initialState() {
 //Função login executa o login em contato com a API.
 async function login({ login, senha }) {
   var sucess = false
-  var localToken
+  var localToken, localLogin
 
   //Conecta com a API via Axios no metodo POST passando o corpo JSON.
   await axios
@@ -33,6 +33,7 @@ async function login({ login, senha }) {
           console.log(response.data.token)
           sucess = true
           localToken = response.data.token
+          localLogin = response.data.admin.login
         })
 
         //Se login Mal Sucedido, mensagem de erro no console.
@@ -43,7 +44,11 @@ async function login({ login, senha }) {
 
         //Se sucess = true, retorna o token de localToken.
         if (sucess){
-          return { token: localToken}
+          console.log(localLogin + " SIM")
+          return { 
+            token: localToken,
+            loginC: localLogin
+          }
         }
 
         //Se sucess = false, retorna erro.
@@ -57,7 +62,7 @@ async function login({ login, senha }) {
 const UserLogin = () => {
   const [values, setValues] = useState(initialState); //Valores dos campos.
   const [error, setError] = useState(null); //Erro retornado.
-  const { setToken } = useContext(StoreContext); //Função para estabelecer Token Global com Context.
+  const { setToken, setLoginC } = useContext(StoreContext); //Função para estabelecer Token Global com Context.
   const history = useHistory(); //Paginação.
   
 
@@ -75,11 +80,13 @@ const UserLogin = () => {
     event.preventDefault();
 
     //Chama login e espera receber token ou error.
-    const { token, error } = await login(values);
+    const { token, loginC, error } = await login(values);
 
     //Se receber token, salva token global e redireciona para Home do App.
     if (token) {
+      console.log(loginC + " SIM2")
       setToken(token); //Salva token global.
+      setLoginC(loginC)
       return history.push('/');//Redireciona para Home.
     }
 
@@ -103,8 +110,8 @@ const UserLogin = () => {
         </div>
           <div className="square">
             <form onSubmit={onSubmit} className="form_addAdmin">
-              <div className="input-login">
-                <label htmlFor="login">Login</label>
+              <div className="input-login input-data">
+                <label>Login</label>
                 <input
                   id="login"
                   type="text"
@@ -113,8 +120,8 @@ const UserLogin = () => {
                   value={values.user}
                 />
               </div>
-              <div className="input-password">
-                <label htmlFor="senha">Senha</label>
+              <div className="input-password ">
+                <label>Senha</label>
                 <input
                   id="senha"
                   type="password"

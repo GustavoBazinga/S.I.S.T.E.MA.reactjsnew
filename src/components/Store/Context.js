@@ -1,6 +1,8 @@
 import { createContext } from 'react';
 
 const StoreContext = createContext({
+  loginC: null,
+  setLoginC: () => {},
   token: null,
   setToken: () => {},
 });

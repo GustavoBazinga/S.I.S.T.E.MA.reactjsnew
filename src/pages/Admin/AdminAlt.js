@@ -58,15 +58,7 @@ const AdminAlt = () => {
 
 
 	function clearMan(){
-		setValues({
-			...values,
-			['nome']: '',
-			['login']: '',
-			['email']: '',
-			['login2']: '',
-			['crpsenha']: '',
-			['crpsenhax']: ''
-		});
+		setValues(initialState);
 		document.getElementById('login2AltAdm').disabled = false
 		document.getElementById('nomeAltAdm').disabled=true
 		document.getElementById('emailAltAdm').disabled=true

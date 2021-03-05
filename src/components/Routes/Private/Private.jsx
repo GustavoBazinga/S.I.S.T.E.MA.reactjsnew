@@ -4,11 +4,12 @@ import StoreContext from 'components/Store/Context';
 
 const RoutesPrivate = ({ component: Component, ...rest}) => {
   const { token } = useContext(StoreContext);
+  const sim = true
 
   return (
     <Route
       {...rest}
-      render={() => token
+      render={() => sim
         ? <Component {...rest} />
         : <Redirect to="/login" />
       }

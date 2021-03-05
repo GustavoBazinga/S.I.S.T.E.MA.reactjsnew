@@ -3,7 +3,7 @@ import React, { useState } from "react";
 
 //import StoreContext from "../../components/Store/Context";
 
-import "../../styles/pages/adminadd.css";
+import "./adminadd.css";
 
 import axios from "axios";
 
@@ -17,6 +17,9 @@ const AdminAdd = () => {
   const [values, setValues] = useState(initialState);
   //const {token} = useContext(StoreContext); 
   //var tokenmineaspas = JSON.stringify(token).replace(/['"]+/g, "");
+  function clearMan(){
+		setValues(initialState);
+	}
 
   function onSubmit(event) {
     event.preventDefault();
@@ -96,7 +99,7 @@ const AdminAdd = () => {
         <button type="submit" className="btnAddAdm">
           Salvar
         </button>
-        <button type="submit" className="btnAddAdmLimpar">
+        <button type="button" className="btnAddAdmLimpar" onClick={clearMan}>
           Limpar
         </button>
       </form>

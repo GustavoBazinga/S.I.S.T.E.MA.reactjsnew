@@ -1,6 +1,13 @@
-.pages-home {
-  width: 400px;
-  margin: 0 auto;
-  font-size: 30px;
-  margin-top: 50px;
+.teste{
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  color: red;
+}
+
+.logocinza{
+  display: flex;
+  
+  margin-left:30%;
+  bottom: 0;
 }

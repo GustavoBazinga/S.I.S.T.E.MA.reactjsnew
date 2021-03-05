@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-import '../../styles/pages/productalt.css';
+import './productalt.css';
 
 import axios from 'axios'
 

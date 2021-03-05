@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-import "../../styles/pages/productadd.css";
+import "./productadd.css";
 
 import axios from "axios";
 
@@ -17,6 +17,9 @@ function initialState() {
 
 const ProAdd = () => {
   const [values, setValues] = useState(initialState);
+  function clearMan(){
+		setValues(initialState);
+	}
 
 function onSubmit(event){
 	event.preventDefault();
@@ -83,7 +86,7 @@ function onSubmit(event){
         <button type="submit" className="btnAddProduct">
           Salvar
         </button>
-        <button type="button" className="btnAddProductLimpar">
+        <button type="button" className="btnAddAdmLimpar" onClick={clearMan}>
           Limpar
         </button>
       </form>

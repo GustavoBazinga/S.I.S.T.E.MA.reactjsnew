@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-import '../../styles/pages/cartaoalt.css';
+import './cartaoalt.css';
 
 import axios from 'axios'
 
@@ -59,7 +59,6 @@ const CartaoAlt = () => {
 		document.getElementById('emailAltCartao').disabled=true
 		document.getElementById('matriculaAltCartao').disabled=true
 		document.getElementById('saldoAltCartao').disabled=true
-		
 	}
 
 	function onSubmit(event){

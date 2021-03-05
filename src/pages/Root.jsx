@@ -7,7 +7,7 @@ import {
 import StoreProvider from 'components/Store/Provider';
 import RoutesPrivate from 'components/Routes/Private/Private';
 import Home from './Home/Home';
-import Login from './Login/Login';
+import Login from './Login/Login.jsx';
 import AdminAdd from './Admin/AdminAdd.js'
 import AdminAlt from './Admin/AdminAlt.js'
 import CartaoAdd from './Card/CartaoAdd.js'

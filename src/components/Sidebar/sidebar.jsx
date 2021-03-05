@@ -29,7 +29,7 @@ import { HiOutlineDocumentReport } from "react-icons/hi";
 
 import { BiLogOutCircle } from "react-icons/bi";
 
-import "../../styles/components/sidebar.css";
+import "./sidebar.css";
 
 import StoreContext from "components/Store/Context";
 
@@ -81,6 +81,16 @@ function Sidebar() {
                   Alterar
                   <Link to="/cartao/alt" />
                 </MenuItem>
+                <SubMenu title="Recarregar">
+                  <MenuItem>
+                    Recarregar
+                    <Link to="/cartao/add" />
+                  </MenuItem>
+                  <MenuItem>
+                    Devolução
+                    <Link to="/cartao/add" />
+                  </MenuItem>
+                </SubMenu>
               </SubMenu>
 
               <SubMenu

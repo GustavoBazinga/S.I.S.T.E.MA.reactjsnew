@@ -6,7 +6,7 @@ import axios from "axios";
 
 import Sidebar from "../../components/Sidebar/Sidebar.jsx";
 
-import "../../styles/pages/cartaoadd.css";
+import "./cartaoadd.css";
 
 function initialState() {
   return {
@@ -20,6 +20,9 @@ function initialState() {
 const CartaoAdd = () => {
   const [values, setValues] = useState(initialState);
 
+  function clearMan(){
+		setValues(initialState);
+	}
   function onSubmit(event){
 	event.preventDefault();
 	axios
@@ -86,7 +89,7 @@ const CartaoAdd = () => {
           Salvar
         </button>
 
-        <button type="submit" className="btnAddCartaoLimpar">
+        <button type="button" className="btnAddAdmLimpar" onClick={clearMan}>
           Limpar
         </button>
       </form>

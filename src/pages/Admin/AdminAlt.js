@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-import '../../styles/pages/adminalt.css';
+import './adminalt.css';
 
 import axios from 'axios'
 

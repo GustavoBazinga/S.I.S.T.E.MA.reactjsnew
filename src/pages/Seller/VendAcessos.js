@@ -31,10 +31,11 @@ class VenAcesso extends React.Component {
   onButtonClick = () => {
     var login;
     const selectedNodes = this.gridApi.getSelectedNodes();
-    const selectedData = selectedNodes.map((node) => node.data);
+    const selectedData = selectedNodes.map((node) => node.data.login);
     console.log("Primeiro Console: " + selectedData);
+    login = JSON.stringify(selectedData)
     if (selectedData.length === 1) {
-      console.log("Segundo Console: " + login);
+      console.log("Segundo Console: ");
       axios
         .delete("https://sistemaifrj.herokuapp.com/admins/l/" + selectedData)
         .then((response) => {

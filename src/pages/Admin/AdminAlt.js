@@ -6,6 +6,11 @@ import axios from 'axios'
 
 import Sidebar from '../../components/Sidebar/Sidebar.jsx';
 
+import ReactNotification from 'react-notifications-component'
+import 'react-notifications-component/dist/theme.css'
+import { store } from 'react-notifications-component';
+import "animate.css"
+
 function initialState() {
 	return { login: '',
 	 		nome: '',
@@ -17,6 +22,7 @@ function initialState() {
 
 const AdminAlt = () => {
 	const [values, setValues] = useState(initialState)
+  var localizado = false
 
 	function toFind(event) {
 		event.preventDefault()
@@ -39,6 +45,20 @@ const AdminAlt = () => {
 					valueEmail: response.data.email
 				}
 			)
+      store.addNotification({
+        title: "Localizado!",
+            message: "Administrador localizado e dados exibidos!",
+            type: "default",
+            container: "top-right",
+            insert:"top",
+            animationIn: ["animate__animated", "animate__fadeIn"],
+            animationOut: ["animate__animated", "animate__fadeOut"],
+            dismiss: {
+              duration: 3000,
+              showIcon: true
+            }
+      })
+      localizado = true
 		})
 		.catch(error => {
 			console.log(error)
@@ -91,17 +111,32 @@ const AdminAlt = () => {
 	}
 
 	function onDelete(event){
-		event.preventDefault();
-		axios
-		.delete("https://sistemaifrj.herokuapp.com/admins/l/" + values.login2)
-		.then(response => {
-			console.log(response)
-			clearMan()
-		})
-		.catch(error => {
-			console.log(error)
-		})
-	}
+    if(localizado){
+      axios
+      .delete("https://sistemaifrj.herokuapp.com/admins/l/" + values.login2)
+      .then(response => {
+        console.log(response)
+        clearMan()
+      })
+      .catch(error => {
+        console.log(error)
+      })
+    }else{
+      store.addNotification({
+        title: "Localizado!",
+            message: "Administrador localizado e dados exibidos!",
+            type: "danger",
+            container: "top-right",
+            insert:"top",
+            animationIn: ["animate__animated", "animate__fadeIn"],
+            animationOut: ["animate__animated", "animate__fadeOut"],
+            dismiss: {
+              duration: 3000,
+              showIcon: true
+            }
+      })
+    }
+  }
 	
 	function OnChange(event) {	
 		const { value, name } = event.target;
@@ -117,7 +152,7 @@ const AdminAlt = () => {
 	return(
 
 		<div>
-				
+		<ReactNotification/>		
 		<Sidebar/>
 		
 		<form  onSubmit={onSubmit}className="form_altAdmin">

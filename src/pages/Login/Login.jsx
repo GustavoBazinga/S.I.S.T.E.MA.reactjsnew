@@ -5,6 +5,7 @@ import logoLogin from '../../images/logoteste.svg';
 import { FaUserCircle } from 'react-icons/fa';
 import { BiHelpCircle } from 'react-icons/bi';
 import { IoIosArrowForward } from 'react-icons/io';
+import logoAnimated from '../../images/LogoGIF.gif'
 
 import axios from 'axios'
 import './Login.css';
@@ -89,7 +90,6 @@ const UserLogin = () => {
       setLoginC(loginC)
       return history.push('/');//Redireciona para Home.
     } 
-    return history.push('/')
 
     //Se receber error, salva error e reinicia campos.
     setError(error);
@@ -100,7 +100,7 @@ const UserLogin = () => {
   return (
     <div id="page-login">
       <div className="logo">
-        <img src={logoLogin}  alt=""/>
+        <img src={logoAnimated}  width="500px"alt=""/>
       </div>
       <div className="coluna">
         <h1>S.I.S.T.E.MA</h1>

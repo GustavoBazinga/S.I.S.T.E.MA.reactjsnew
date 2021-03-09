@@ -10,7 +10,7 @@ class VenAcesso extends React.Component {
     this.state = {
       columnDefs: [
         { headerName: "Nome", field: "nome", checkboxSelection: true },
-        { headerName: "Login", field: "login" },
+        { headerName: "Matrícula", field: "matricula" },
         { headerName: "Email", field: "email" },
       ],
       rowData: null,
@@ -22,7 +22,7 @@ class VenAcesso extends React.Component {
   }
 
   componentDidMount() {
-    fetch("https://sistemaifrj.herokuapp.com/admins/")
+    fetch("https://sistemaifrj.herokuapp.com/users/")
       .then((response) => response.json())
       .then((rowData) => this.setState({ rowData }))
       .catch((err) => console.log(err));
@@ -31,13 +31,13 @@ class VenAcesso extends React.Component {
   onButtonClick = () => {
     var login;
     const selectedNodes = this.gridApi.getSelectedNodes();
-    const selectedData = selectedNodes.map((node) => node.data.login);
+    const selectedData = selectedNodes.map((node) => node.data.matricula);
     console.log("Primeiro Console: " + selectedData);
     login = JSON.stringify(selectedData)
     if (selectedData.length === 1) {
       console.log("Segundo Console: ");
       axios
-        .delete("https://sistemaifrj.herokuapp.com/admins/l/" + selectedData)
+        .delete("https://sistemaifrj.herokuapp.com/users/" + selectedData)
         .then((response) => {
           console.log(response);
         })
@@ -50,7 +50,7 @@ class VenAcesso extends React.Component {
       for (var i in selectedData) {
         console.log(selectedData[i]);
         axios
-          .delete("https://sistemaifrj.herokuapp.com/admins/l/" + selectedData[i])
+          .delete("https://sistemaifrj.herokuapp.com/users/" + selectedData[i])
           .then((response) => {
             console.log(response);
           })

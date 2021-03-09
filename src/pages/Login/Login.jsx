@@ -18,7 +18,7 @@ function initialState() {
 //Função login executa o login em contato com a API.
 async function login({ login, senha }) {
   var sucess = false
-  var localToken, localLogin
+  var localToken, localLogin, localId
 
   //Conecta com a API via Axios no metodo POST passando o corpo JSON.
   await axios
@@ -33,6 +33,7 @@ async function login({ login, senha }) {
           console.log(response)
           console.log(response.data.token)
           sucess = true
+          localId = response.data.id
           localToken = response.data.token
           localLogin = response.data.admin.login
         })
@@ -47,8 +48,9 @@ async function login({ login, senha }) {
         if (sucess){
           console.log(localLogin + " SIM")
           return { 
+            idC: localId,
+            loginC: localLogin,
             token: localToken,
-            loginC: localLogin
           }
         }
 
@@ -63,7 +65,7 @@ async function login({ login, senha }) {
 const UserLogin = () => {
   const [values, setValues] = useState(initialState); //Valores dos campos.
   const [error, setError] = useState(null); //Erro retornado.
-  const { setToken, setLoginC } = useContext(StoreContext); //Função para estabelecer Token Global com Context.
+  const { setToken, setLoginC, setIdC } = useContext(StoreContext); //Função para estabelecer Token Global com Context.
   const history = useHistory(); //Paginação.
   
 
@@ -81,13 +83,14 @@ const UserLogin = () => {
     event.preventDefault();
 
     //Chama login e espera receber token ou error.
-    const { token, loginC, error } = await login(values);
+    const { token, loginC, idC, error } = await login(values);
 
     //Se receber token, salva token global e redireciona para Home do App.
     if (token) {
       console.log(loginC + " SIM2")
       setToken(token); //Salva token global.
       setLoginC(loginC)
+      setIdC(idC)
       return history.push('/');//Redireciona para Home.
     } 
 
@@ -100,7 +103,7 @@ const UserLogin = () => {
   return (
     <div id="page-login">
       <div className="logo">
-        <img src={logoAnimated}  width="500px"alt=""/>
+        <img src={logoAnimated}  width="500px" alt=""/>
       </div>
       <div className="coluna">
         <h1>S.I.S.T.E.MA</h1>

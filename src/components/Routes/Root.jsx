@@ -6,17 +6,18 @@ import {
 } from 'react-router-dom';
 import StoreProvider from 'components/Store/Provider';
 import RoutesPrivate from 'components/Routes/Private/Private';
-import Home from './Home/Home';
-import Login from './Login/Login.jsx';
-import AdminAdd from './Admin/AdminAdd.js'
-import AdminAlt from './Admin/AdminAlt.js'
-import CartaoAdd from './Card/CartaoAdd.js'
-import ProAdd from './Products/ProAdd.js'
-import ProAlt from './Products/ProAlt.js'
-import VenAdd from './Seller/VendAdd.js'
-import CartaoAlt from './Card/CartaoAlt.js'
-import DepAdd from './Dep/DepAdd.js'
-import VenAcessos from './Seller/VendAcessos.js'
+import Home from '../../pages/Home/Home';
+import Login from '../../pages/Login/Login.jsx';
+import AdminAdd from '../../pages/Admin/AdminAdd.js'
+import AdminAlt from '../../pages/Admin/AdminAlt.js'
+import CartaoAdd from '../../pages/Card/CartaoAdd.js'
+import CartaoAlt from '../../pages/Card/CartaoAlt.js'
+import CartaoRec from '../../pages/Card/CartaoRec.js'
+import ProAdd from '../../pages/Products/ProAdd.js'
+import ProAlt from '../../pages/Products/ProAlt.js'
+import VenAdd from '../../pages/Seller/VendAdd.js'
+import VenAcessos from '../../pages/Seller/VendAcessos.js'
+import DepAdd from '../../pages/Dep/DepAdd.js'
 
 const PagesRoot = () => (
   <Router>
@@ -27,6 +28,7 @@ const PagesRoot = () => (
         <RoutesPrivate path="/admin/alt" component={AdminAlt} />
         <RoutesPrivate path="/cartao/add" component={CartaoAdd} />
         <RoutesPrivate path="/cartao/alt" component={CartaoAlt} />
+        <RoutesPrivate path="/cartao/rec" component={CartaoRec} />
         <RoutesPrivate path="/produto/add" component={ProAdd} />
         <RoutesPrivate path="/produto/alt" component={ProAlt} />
         <RoutesPrivate path="/vendedor/add" component={VenAdd} />

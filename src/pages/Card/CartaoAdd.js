@@ -1,11 +1,16 @@
 import React, { useState } from "react";
 
+import CurrencyInput from "react-currency-input";
+
 //FAZER CSS VENDEDORADD
 
 import axios from "axios";
 
 import Sidebar from "../../components/Sidebar/Sidebar.jsx";
-
+import ReactNotification from 'react-notifications-component'
+import 'react-notifications-component/dist/theme.css'
+import { store } from 'react-notifications-component';
+import "animate.css"
 import "./cartaoadd.css";
 
 function initialState() {
@@ -13,27 +18,76 @@ function initialState() {
     matricula: "",
     nome: "",
     email: "",
-    saldo: "",
+    saldo: "0",
   };
 }
 
 const CartaoAdd = () => {
   const [values, setValues] = useState(initialState);
 
-  function clearMan(){
-		setValues(initialState);
-	}
-  function onSubmit(event){
-	event.preventDefault();
-	axios
-		.post('https://sistemaifrj.herokuapp.com/users/', values)
-		.then(response => {
-			console.log(response)
-		})
-		.catch(error => {
-			console.log(error)
-		})
-}
+  function clearMan() {
+    setValues(initialState);
+  }
+  function onSubmit(event) {
+    event.preventDefault();
+
+    if (values.nome !== "" && values.matricula !== "" && values.email !== ""){
+      console.log("Entrou")
+      axios
+      .post("https://sistemaifrj.herokuapp.com/users/", {
+        matricula: values.matricula,
+        nome: values.nome,
+        email: values.email,
+        saldo: values.saldo.replace("R$ ", "").replace(/[\.,]+/g, "")
+      })
+      .then((response) => {
+        store.addNotification({
+          title: "Cadastro realizado",
+          message: "Cartão cadastrado com sucesso!",
+          type: "success",
+          container: "top-right",
+          insert:"top",
+          animationIn: ["animate__animated", "animate__fadeIn"],
+          animationOut: ["animate__animated", "animate__fadeOut"],
+          dismiss: {
+            duration: 3000,
+            showIcon: true
+          }
+        })
+        clearMan()
+      })
+      .catch((error) => {
+        store.addNotification({
+          title: "Falha!",
+          message: "ERICK, FAÇA UM RETORNO DE ERRO MELHOR!",
+          type: "danger",
+          container: "top-right",
+          insert:"top",
+          animationIn: ["animate__animated", "animate__fadeIn"],
+          animationOut: ["animate__animated", "animate__fadeOut"],
+          dismiss: {
+            duration: 3000,
+            showIcon: true
+          }
+        })
+        clearMan()
+      });
+    }else{
+      store.addNotification({
+        title: "Falha!",
+            message: "Preencha todos os campos do formulário!",
+            type: "warning",
+            container: "top-right",
+            insert:"top",
+            animationIn: ["animate__animated", "animate__fadeIn"],
+            animationOut: ["animate__animated", "animate__fadeOut"],
+            dismiss: {
+              duration: 3000,
+              showIcon: true
+            }
+      })
+    }
+  }
   function OnChange(event) {
     const { value, name } = event.target;
     setValues({
@@ -44,6 +98,7 @@ const CartaoAdd = () => {
 
   return (
     <div>
+      <ReactNotification />
       <Sidebar />
 
       <form onSubmit={onSubmit} className="form_addCartao">
@@ -76,19 +131,21 @@ const CartaoAdd = () => {
         </div>
 
         <div className="inputCartaoSaldo">
-          <input
-            type="number"
-            name="saldo"
+          <CurrencyInput
+            prefix="R$ "
+            decimalSeparator=","
+            thousandSeparator="."
             placeholder="Saldo"
+            name="saldo"
+            
             value={values.saldo}
-            onChange={OnChange}
+            onChangeEvent={OnChange}
           />
         </div>
 
         <button type="submit" className="btnAddCartao">
           Salvar
         </button>
-
         <button type="button" className="btnAddAdmLimpar" onClick={clearMan}>
           Limpar
         </button>

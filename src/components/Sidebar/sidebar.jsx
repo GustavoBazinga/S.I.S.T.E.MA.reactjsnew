@@ -84,7 +84,7 @@ function Sidebar() {
                 <SubMenu title="Recarregar">
                   <MenuItem>
                     Recarregar
-                    <Link to="/cartao/add" />
+                    <Link to="/cartao/rec" />
                   </MenuItem>
                   <MenuItem>
                     Devolução

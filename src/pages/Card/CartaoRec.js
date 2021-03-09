@@ -2,8 +2,6 @@ import React, { useState } from "react";
 
 import CurrencyInput from "react-currency-input";
 
-import "./cartaoalt.css";
-
 import axios from "axios";
 import ReactNotification from "react-notifications-component";
 import "react-notifications-component/dist/theme.css";
@@ -13,10 +11,10 @@ import "animate.css";
 import Sidebar from "../../components/Sidebar/Sidebar.jsx";
 
 function initialState() {
-  return { matricula: "", nome: "", email: "", saldo: "", matricula2: "" };
+  return { matricula: "", nome: "", email: "", saldo: "0", matricula2: "" };
 }
 
-const CartaoAlt = () => {
+const CartaoRec = () => {
   const [values, setValues] = useState(initialState);
 
   function toFind(event) {
@@ -28,11 +26,9 @@ const CartaoAlt = () => {
         .get("https://sistemaifrj.herokuapp.com/users/f/" + values.matricula2)
         .then((response) => {
           console.log(response);
-          document.getElementById("matricula2AltCartao").disabled = true;
-          document.getElementById("nomeAltCartao").disabled = false;
-          document.getElementById("emailAltCartao").disabled = false;
-          document.getElementById("matriculaAltCartao").disabled = false;
-          document.getElementById("saldoAltCartao").disabled = false;
+          document.getElementById("matricula2RecCartao").disabled = true;
+          document.getElementById("nomeRecCartao").disabled = false;
+          document.getElementById("emailRecCartao").disabled = false;
           OnFound({
             valueNome: response.data.nome,
             valueMatricula: response.data.matricula,
@@ -196,11 +192,11 @@ const CartaoAlt = () => {
     <div>
       <ReactNotification />
       <Sidebar />
-
-      <form onSubmit={onSubmit} className="form_altCartao">
-        <div className="inputCartaoMatricula2_alt">
+      <label>asdasasdasdadsasdasddaadsdasads</label>
+      <form onSubmit={onSubmit}>
+        <div>
           <input
-            id="matricula2AltCartao"
+            id="matricula2RecCartao"
             type="text"
             name="matricula2"
             placeholder="Matricula de Busca"
@@ -208,11 +204,10 @@ const CartaoAlt = () => {
             onChange={OnChange}
           />
         </div>
-
-        <div className="inputCartaoNome_alt">
+        <div>
           <input
             disabled
-            id="nomeAltCartao"
+            id="nomeRecCartao"
             type="text"
             name="nome"
             placeholder="Nome Completo"
@@ -221,10 +216,10 @@ const CartaoAlt = () => {
           />
         </div>
 
-        <div className="inputCartaoEmail_alt">
+        <div>
           <input
             disabled
-            id="emailAltCartao"
+            id="emailRecCartao"
             type="text"
             name="email"
             placeholder="E-mail"
@@ -232,21 +227,13 @@ const CartaoAlt = () => {
             onChange={OnChange}
           />
         </div>
-
-        <div className="inputCartaoMatricula_alt">
-          <input
-            disabled
-            id="matriculaAltCartao"
-            type="text"
-            name="matricula"
-            placeholder="Matricula"
-            value={values.matricula}
-            onChange={OnChange}
-          />
-        </div>
-
-        <div className="inputCartaoSaldo_alt">
-          <CurrencyInput
+        <button>R$ 5</button>
+        <button>R$ 10</button>
+        <button>R$ 20</button>
+        <combobox>
+          
+        </combobox>
+        <CurrencyInput
             prefix="R$ "
             decimalSeparator=","
             thousandSeparator="."
@@ -256,28 +243,20 @@ const CartaoAlt = () => {
             value={values.saldo}
             onChangeEvent={OnChange}
           />
-        </div>
+        <button type="submit">Salvar</button>
 
-        <button type="submit" className="btnAltCartao">
-          Salvar
-        </button>
-
-        <button type="button" onClick={clearMan} className="btnAltCartaoLimpar">
+        <button type="button" onClick={clearMan}>
           Limpar
         </button>
       </form>
-      <form onSubmit={onDelete} className="form_altCartao">
-        <button type="submit" className="btnExcCartao">
-          Excluir
-        </button>
+      <form onSubmit={onDelete}>
+        <button type="submit">Excluir</button>
       </form>
-      <form onSubmit={toFind} className="form_altCartao">
-        <button type="submit" className="btnFindCartao">
-          Localizar
-        </button>
+      <form onSubmit={toFind}>
+        <button type="submit">Localizar</button>
       </form>
     </div>
   );
 };
 
-export default CartaoAlt;
+export default CartaoRec;

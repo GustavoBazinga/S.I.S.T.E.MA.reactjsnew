@@ -7,6 +7,9 @@ import ReactNotification from "react-notifications-component";
 import "react-notifications-component/dist/theme.css";
 import { store } from "react-notifications-component";
 import "animate.css";
+import Select from "@material-ui/core/Select";
+import MenuItem from "@material-ui/core/MenuItem";
+import InputLabel from "@material-ui/core/InputLabel";
 
 import Sidebar from "../../components/Sidebar/Sidebar.jsx";
 
@@ -191,7 +194,7 @@ const CartaoRec = () => {
   return (
     <div>
       <ReactNotification />
-      <Sidebar />
+      {/* <Sidebar /> */}
       <label>asdasasdasdadsasdasddaadsdasads</label>
       <form onSubmit={onSubmit}>
         <div>
@@ -230,9 +233,25 @@ const CartaoRec = () => {
         <button>R$ 5</button>
         <button>R$ 10</button>
         <button>R$ 20</button>
-        <combobox>
-          
-        </combobox>
+        <InputLabel id="demo-controlled-open-select-label">
+          Modo de Pagamento
+        </InputLabel>
+        <Select
+          labelId="demo-controlled-open-select-label"
+          id="demo-controlled-open-select"
+          // open={open}
+          // onClose={handleClose}
+          // onOpen={handleOpen}
+          // value={age}
+          // onChange={handleChange}
+        >
+          <MenuItem value="">
+            <em> </em>
+          </MenuItem>
+          <MenuItem value={10}>Ten</MenuItem>
+          <MenuItem value={20}>Twenty</MenuItem>
+          <MenuItem value={30}>Thirty</MenuItem>
+        </Select>
         <CurrencyInput
             prefix="R$ "
             decimalSeparator=","

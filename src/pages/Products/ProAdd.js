@@ -4,6 +4,11 @@ import "./productadd.css";
 
 import axios from "axios";
 
+import ReactNotification from 'react-notifications-component'
+import 'react-notifications-component/dist/theme.css'
+import { store } from 'react-notifications-component';
+import "animate.css"
+
 import Sidebar from "../../components/Sidebar/Sidebar.jsx";
 
 function initialState() {
@@ -23,15 +28,46 @@ const ProAdd = () => {
 
 function onSubmit(event){
 	event.preventDefault();
-	axios
+  console.log("")
+  if (values.nome !== "" && values.estoque !== "" && values.preco !== "" && values.categoria !== ""){
+    axios
 		.post('https://sistemaifrj.herokuapp.com/produtos/', values)
 		.then(response => {
-			console.log(response)
+      console.log(response)
+      store.addNotification({
+        title: "Cadastro realizado",
+        message: "Produto cadastrado com sucesso!",
+        type: "success",
+        container: "top-right",
+        insert:"top",
+        animationIn: ["animate__animated", "animate__fadeIn"],
+        animationOut: ["animate__animated", "animate__fadeOut"],
+        dismiss: {
+          duration: 3000,
+          showIcon: true
+        }
+      })
+      clearMan()
 		})
 		.catch(error => {
-			console.log(error)
+      console.log(error)
 		})
-
+    
+  }else{
+    store.addNotification({
+      title: "Falha!",
+          message: "Preencha todos os campos do formulário!",
+          type: "warning",
+          container: "top-right",
+          insert:"top",
+          animationIn: ["animate__animated", "animate__fadeIn"],
+          animationOut: ["animate__animated", "animate__fadeOut"],
+          dismiss: {
+            duration: 3000,
+            showIcon: true
+          }
+    })
+  }
 }
 
   function OnChange(event) {
@@ -44,6 +80,7 @@ function onSubmit(event){
 
   return (
     <div>
+       <ReactNotification />
       <Sidebar />
 
       <form onSubmit={onSubmit} className="form_addProduct">
@@ -58,7 +95,7 @@ function onSubmit(event){
         </div>
         <div className="inputProductEstoque">
           <input
-            type="text"
+            type="number"
             name="estoque"
             placeholder="Estoque"
             value={values.estoque}
@@ -76,7 +113,7 @@ function onSubmit(event){
         </div>
         <div className="inputProductPreco">
           <input
-            type="text"
+            type="number"
             name="preco"
             placeholder="Preço"
             value={values.preco}
@@ -86,7 +123,7 @@ function onSubmit(event){
         <button type="submit" className="btnAddProduct">
           Salvar
         </button>
-        <button type="button" className="btnAddAdmLimpar" onClick={clearMan}>
+        <button type="button" className="btnAddProductLimpar" onClick={clearMan}>
           Limpar
         </button>
       </form>

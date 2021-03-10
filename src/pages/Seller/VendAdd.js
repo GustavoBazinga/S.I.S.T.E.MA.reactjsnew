@@ -6,6 +6,11 @@ import axios from "axios";
 
 import "./vendadd.css";
 
+import ReactNotification from "react-notifications-component";
+import "react-notifications-component/dist/theme.css";
+import { store } from "react-notifications-component";
+import "animate.css";
+
 import Sidebar from "../../components/Sidebar/Sidebar.jsx";
 
 function initialState() {
@@ -14,23 +19,74 @@ function initialState() {
 
 const VenAdd = () => {
   const [values, setValues] = useState(initialState);
-  function clearMan(){
-	setValues(initialState);
-}
+  function clearMan() {
+    setValues(initialState);
+  }
 
   function onSubmit(event) {
     event.preventDefault();
-    if (values.crpsenha !== values.crpsenhax) {
-      alert("Digita uma senha igual o nóia");
-    } else {
-      axios
-        .post("https://sistemaifrj.herokuapp.com/vendedores/", values)
-        .then((response) => {
-          console.log(response);
-        })
-        .catch((error) => {
-          console.log(error);
+    console.log("");
+    if (
+      values.nome !== "" &&
+      values.matricula !== "" &&
+      values.email !== "" &&
+      values.crpsenha !== "" &&
+      values.crpsenhax !== ""
+    ) {
+      if (values.crpsenha !== values.crpsenhax) {
+        store.addNotification({
+          title: "Falha!",
+          message: "Digite uma senha igual, seu nóia!",
+          type: "warning",
+          container: "top-right",
+          insert: "top",
+          animationIn: ["animate__animated", "animate__fadeIn"],
+          animationOut: ["animate__animated", "animate__fadeOut"],
+          dismiss: {
+            duration: 3000,
+            showIcon: true,
+          },
         });
+      } else {
+        console.log("");
+        axios
+          .post("https://sistemaifrj.herokuapp.com/vendedores/", values)
+          .then((response) => {
+            console.log(response);
+            store.addNotification({
+              title: "Cadastro realizado",
+              message: "Vendedor Cadastrado com Sucesso!",
+              type: "success",
+              container: "top-right",
+              insert: "top",
+              animationIn: ["animate__animated", "animate__fadeIn"],
+              animationOut: ["animate__animated", "animate__fadeOut"],
+              dismiss: {
+                duration: 3000,
+                showIcon: true,
+              },
+            });
+            clearMan();
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      }
+    } else {
+      console.log("");
+      store.addNotification({
+        title: "Falha!",
+        message: "Preencha todos os campos do formulário!",
+        type: "warning",
+        container: "top-right",
+        insert: "top",
+        animationIn: ["animate__animated", "animate__fadeIn"],
+        animationOut: ["animate__animated", "animate__fadeOut"],
+        dismiss: {
+          duration: 3000,
+          showIcon: true,
+        },
+      });
     }
   }
 
@@ -44,6 +100,7 @@ const VenAdd = () => {
 
   return (
     <div>
+      <ReactNotification />
       <Sidebar />
 
       <form onSubmit={onSubmit} className="form_addVend">
@@ -94,10 +151,12 @@ const VenAdd = () => {
           />
         </div>
 
+        
+
         <button type="submit" className="btnAddVend">
           Salvar
         </button>
-        <button type="button" className="btnAddAdmLimpar" onClick={clearMan}>
+        <button type="button" className="btnAddVendLimpar" onClick={clearMan}>
           Limpar
         </button>
       </form>

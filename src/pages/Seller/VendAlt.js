@@ -17,34 +17,41 @@ import "animate.css";
 
 function initialState() {
   return {
+    matricula: "",
     nome: "",
-    categoria: "",
-    nome2: "",
+    email: "",
+    crpsenha: "",
+    matricula2: "",
+    crpsenhax: "",
   };
 }
 
-const AdminAlt = () => {
+const VenAlt = () => {
   const [values, setValues] = useState(initialState);
 
   function toFind(event) {
     event.preventDefault();
 
     console.log(values);
-    if (values.nome2 !== "") {
+    if (values.login2 !== "") {
       axios
-        .get("https://sistemaifrj.herokuapp.com/departamento/" + values.nome2)
+        .get("https://sistemaifrj.herokuapp.com/vendedores/f/" + values.matricula2)
         .then((response) => {
           console.log(response);
-          document.getElementById("nomeAltDep").disabled = false;
-          document.getElementById("categoriaAltDep").disabled = false;
-          document.getElementById("nome2AltDep").disabled = true;
+          document.getElementById("matricula2AltVen").disabled = true;
+          document.getElementById("nomeAltVen").disabled = false;
+          document.getElementById("emailAltVen").disabled = false;
+          document.getElementById("matriculaAltVen").disabled = false;
+          document.getElementById("passwordAltVen").disabled = false;
+          document.getElementById("passwordConfirmedAltVen").disabled = false;
           OnFound({
             valueNome: response.data.nome,
-            valueCategoria: response.data.categoria,
+            valueMatricula: response.data.matricula,
+            valueEmail: response.data.email,
           });
           store.addNotification({
             title: "Localizado!",
-            message: "Departamento localizado e dados exibidos!",
+            message: "Administrador localizado e dados exibidos!",
             type: "default",
             container: "top-right",
             insert: "top",
@@ -61,9 +68,9 @@ const AdminAlt = () => {
         });
     } else {
       store.addNotification({
-        title: "Não foi possível localizar o departamento!",
+        title: "Não foi possível localizar o adminstrador!",
         message:
-          "O campo de busca está vazio. Digite o nome do departamento desejado e tente novamente.",
+          "O campo de busca está vazio. Digite o Login do Administrador desejado e tente novamente.",
         type: "warning",
         container: "top-right",
         insert: "top",
@@ -77,36 +84,62 @@ const AdminAlt = () => {
     }
   }
 
-  function OnFound({ valueNome, valueCategoria}) {
+  function OnFound({ valueNome, valueMatricula, valueEmail }) {
     setValues({
       ...values,
       ["nome"]: valueNome,
-      ["categoria"]: valueCategoria,
+      ["matricula"]: valueMatricula,
+      ["email"]: valueEmail,
     });
   }
 
   function clearMan() {
     setValues(initialState);
-    document.getElementById("nome2AltDep").disabled = false;
-    document.getElementById("nomeAltDep").disabled = true;
-    document.getElementById("categoriaAltDep").disabled = true;
-
+    document.getElementById("matricula2AltVen").disabled = false;
+    document.getElementById("nomeAltVen").disabled = true;
+    document.getElementById("emailAltVen").disabled = true;
+    document.getElementById("matriculaAltVen").disabled = true;
+    document.getElementById("passwordAltVen").disabled = true;
+    document.getElementById("passwordConfirmedAltVen").disabled = true;
   }
 
   function onSubmit(event) {
     event.preventDefault();
-    if (document.getElementById("nome2AltDep").disabled) {
+    if (document.getElementById("matricula2AltVen").disabled) {
       if (
         values.nome !== "" &&
-        values.categoria !== ""
+        values.login !== "" &&
+        values.email !== "" &&
+        values.crpsenha !== "" &&
+        values.crpsenhax !== ""
       ) {
+        if (values.crpsenha !== values.crpsenhax) {
+          store.addNotification({
+            title: "Falha!",
+            message: "Digite uma senha igual, seu nóia!",
+            type: "warning",
+            container: "top-right",
+            insert: "top",
+            animationIn: ["animate__animated", "animate__fadeIn"],
+            animationOut: ["animate__animated", "animate__fadeOut"],
+            dismiss: {
+              duration: 3000,
+              showIcon: true,
+            },
+          });
+        } else {
           axios
-            .put("https://sistemaifrj.herokuapp.com/departamento/" + values.nome2, values)
+            .put("https://sistemaifrj.herokuapp.com/vendedores/" + values.matricula2, {
+              nome: values.nome,
+              matricula: values.matricula,
+              email: values.email,
+              crpsenha: values.crpsenha,
+            })
             .then((response) => {
               console.log(response);
               store.addNotification({
                 title: "Cadastro atualizado",
-                message: "Departamento atualizado com sucesso!",
+                message: "Adminstrador atualizado com sucesso!",
                 type: "success",
                 container: "top-right",
                 insert: "top",
@@ -122,7 +155,7 @@ const AdminAlt = () => {
             .catch((error) => {
               console.log(error);
             });
-        
+        }
       }else{
         store.addNotification({
           title: "Falha!",
@@ -142,7 +175,7 @@ const AdminAlt = () => {
       store.addNotification({
         title: "Atualização bloqueada!",
         message:
-          "É preciso localizar um departamento antes de tentar atualizar. Tente novamente.",
+          "É preciso localizar um vendedor antes de tentar atualizar. Tente novamente.",
         type: "danger",
         container: "top-right",
         insert: "top",
@@ -158,16 +191,14 @@ const AdminAlt = () => {
 
   async function onDelete(event) {
     event.preventDefault();
-    console.log("ASDASDASD");
-    
-    if (document.getElementById("nome2AltDep").disabled) {
+    if (document.getElementById("matricula2AltVen").disabled) {
       axios
-        .delete("https://sistemaifrj.herokuapp.com/departamento/" + values.nome2)
+        .delete("https://sistemaifrj.herokuapp.com/vendedores/m/" + values.matricula2)
         .then((response) => {
           console.log(response);
           store.addNotification({
             title: "Exclusão realizada",
-            message: "Departamento excluído com sucesso!",
+            message: "Vendedor excluído com sucesso!",
             type: "success",
             container: "top-right",
             insert: "top",
@@ -187,7 +218,7 @@ const AdminAlt = () => {
       store.addNotification({
         title: "Exclusão bloqueada!",
         message:
-          "É preciso localizar um departamento antes de tentar excluir. Tente novamente.",
+          "É preciso localizar um vendedor antes de tentar excluir. Tente novamente.",
         type: "danger",
         container: "top-right",
         insert: "top",
@@ -276,7 +307,7 @@ const AdminAlt = () => {
       marginTop: "2ch",
     },
     email: {
-      width: "80ch",
+      width: "38ch",
       marginTop: "2ch",
     },
     senha: {
@@ -297,18 +328,19 @@ const AdminAlt = () => {
         <Sidebar />
       </div>
       <div className="titleAdmAlt">
-        <h1>Alterar Departamento</h1>
+        <h1>Alterar Vendedor (Atulizar não funcionando. Erick nóia)</h1>
       </div>
       <form onSubmit={onSubmit} className={classes.root}>
         <TextField
-          id="nome2AltDep"
-          name="nome2"
-          value={values.nome2}
+          id="matricula2AltVen"
+          name="matricula2"
+          value={values.matricula2}
           onChange={OnChange}
-          label="Nome do Departamento para busca"
+          label="Matrícula de busca"
           variant="outlined"
           className={classes.login2}
         />
+
         <Button
           variant="contained"
           onClick={toFind}
@@ -318,24 +350,61 @@ const AdminAlt = () => {
         </Button>
         <TextField
           disabled
-          id="nomeAltDep"
+          id="nomeAltVen"
           name="nome"
           value={values.nome}
-          label="Nome do Departamento"
+          onChange={OnChange}
+          label="Nome Completo"
           variant="outlined"
           className={classes.nome}
           onChange={OnChange}
         />
         <TextField
           disabled
-          id="categoriaAltDep"
-          label="Categoria do Departamento"
-          name="categoria"
-          value={values.categoria}
+          id="emailAltVen"
+          label="E-mail"
+          name="email"
+          value={values.email}
+          onChange={OnChange}
           className={classes.email}
           variant="outlined"
           onChange={OnChange}
         />
+        <TextField
+          disabled
+          id="matriculaAltVen"
+          name="matricula"
+          value={values.matricula}
+          onChange={OnChange}
+          label="Matrícula"
+          variant="outlined"
+          className={classes.login}
+        />
+
+        <TextField
+          disabled
+          id="passwordAltVen"
+          type="password"
+          label="Senha"
+          name="crpsenha"
+          value={values.crpsenha}
+          onChange={OnChange}
+          className={classes.senha}
+          variant="outlined"
+        />
+        <TextField
+          disabled
+          id="passwordConfirmedAltVen"
+          type="password"
+          name="crpsenhax"
+          value={values.crpsenhax}
+
+          label="Confirmar Senha"
+          className={classes.senhaConfirmar}
+          variant="outlined"
+          onChange={OnChange}
+        />
+
         <div className="buttonGeral">
           <Button
             variant="contained"
@@ -369,4 +438,4 @@ const AdminAlt = () => {
   );
 };
 
-export default AdminAlt;
+export default VenAlt;

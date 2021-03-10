@@ -146,7 +146,7 @@ const CartaoAdd = () => {
         <button type="submit" className="btnAddCartao">
           Salvar
         </button>
-        <button type="button" className="btnAddAdmLimpar" onClick={clearMan}>
+        <button type="button" className="btnAddCartaoLimpar" onClick={clearMan}>
           Limpar
         </button>
       </form>

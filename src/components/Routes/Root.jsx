@@ -17,6 +17,7 @@ import CartaoDev from '../../pages/Card/CartaoDev.js'
 import ProAdd from '../../pages/Products/ProAdd.js'
 import ProAlt from '../../pages/Products/ProAlt.js'
 import VenAdd from '../../pages/Seller/VendAdd.js'
+import VenAlt from '../../pages/Seller/VendAlt.js'
 import VenAcessos from '../../pages/Seller/VendAcessos.js'
 import DepAdd from '../../pages/Dep/DepAdd.js'
 import DepAlt from '../../pages/Dep/DepAlt.js'
@@ -38,9 +39,10 @@ const PagesRoot = () => (
         <RoutesPrivate path="/produto/add" component={ProAdd} />
         <RoutesPrivate path="/produto/alt" component={ProAlt} />
         <RoutesPrivate path="/vendedor/add" component={VenAdd} />
+        <RoutesPrivate path="/vendedor/alt" component={VenAlt} />
+        <RoutesPrivate path="/vendedor/acessos" component={VenAcessos}/>
         <RoutesPrivate path="/departamento/add" component={DepAdd}/>
         <RoutesPrivate path="/departamento/alt" component={DepAlt}/>
-        <RoutesPrivate path="/vendedor/acessos" component={VenAcessos}/>
         <RoutesPrivate path="/" component={Home} />
       </Switch>
     </StoreProvider>

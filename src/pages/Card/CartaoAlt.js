@@ -58,7 +58,7 @@ const CartaoAlt = () => {
         });
     } else {
       store.addNotification({
-        title: "Não foi possível localizar o caartão!",
+        title: "Não foi possível localizar o cartão!",
         message:
           "O campo de busca está vazio. Digite o matrícula do cartão desejado e tente novamente.",
         type: "warning",
@@ -150,7 +150,7 @@ const CartaoAlt = () => {
           console.log(response);
           store.addNotification({
             title: "Exclusão realizada",
-            message: "Adminstrador excluído com sucesso!",
+            message: "Cartão excluído com sucesso!",
             type: "success",
             container: "top-right",
             insert: "top",

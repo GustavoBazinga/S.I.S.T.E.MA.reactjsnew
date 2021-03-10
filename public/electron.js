@@ -9,7 +9,7 @@ function createWindow() {
     resizable: false,
     width: 1280,
     height: 720,
-    titleBarStyle: "hidden",
+  
   });
   mainWindow.loadURL(
     isDev

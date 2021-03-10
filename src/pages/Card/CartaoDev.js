@@ -17,18 +17,13 @@ import { set } from "js-cookie";
 
 function initialState() {
   return {
-    matricula: "",
-    nome: "",
-    email: "",
-    saldo: 0,
     matricula2: "",
-    saldo2: 0,
-    saldo3: 0,
-    modo: "",
+    disponivelDev: 0,
+    devSolicitado: 0,
   };
 }
-var somaRecarga = 0;
-const CartaoRec = () => {
+var valorAntigo = 0;
+const CartaoDev = () => {
   const [values, setValues] = useState(initialState);
   var atual = values.saldo;
 
@@ -38,17 +33,11 @@ const CartaoRec = () => {
     console.log(values);
     if (values.matricula2 !== "") {
       axios
-        .get("https://sistemaifrj.herokuapp.com/users/f/" + values.matricula2)
+        .get("https://sistemaifrj.herokuapp.com/users/r/" + values.matricula2)
         .then((response) => {
           console.log(response);
-          document.getElementById("matricula2RecCartao").disabled = true;
-          document.getElementById("nomeRecCartao").disabled = false;
-          document.getElementById("emailRecCartao").disabled = false;
           OnFound({
-            valueNome: response.data.nome,
-            valueMatricula: response.data.matricula,
-            valueEmail: response.data.email,
-            valueSaldo: response.data.saldo,
+            value: response.data,
           });
           store.addNotification({
             title: "Localizado!",
@@ -85,14 +74,11 @@ const CartaoRec = () => {
     }
   }
 
-  function OnFound({ valueNome, valueMatricula, valueEmail, valueSaldo }) {
+  function OnFound({ value }) {
+    console.log(value);
     setValues({
       ...values,
-      ["nome"]: valueNome,
-      ["matricula"]: valueEmail,
-      ["email"]: valueEmail,
-      ["saldo"]: valueSaldo / 100,
-      ["saldo3"]: valueSaldo / 100,
+      ["disponivelDev"]: value / 100,
     });
   }
 
@@ -105,25 +91,24 @@ const CartaoRec = () => {
     document.getElementById("saldoAltCartao").disabled = true;
   }
 
-  async function criaRecarga() {
+  async function onSubmit(event) {
+    event.preventDefault();
+    var saldoTotal;
     await axios
-      .post("https://sistemaifrj.herokuapp.com/recargas/" + values.matricula2, {
-        modo_pagto: values.modo,
-        valor_recarga: values.saldo2 * 100,
-      })
+      .get("https://sistemaifrj.herokuapp.com/users/f/" + values.matricula2)
       .then((response) => {
-        console.log("POST Response:");
         console.log(response);
+        saldoTotal = response.data.saldo;
+        console.log(saldoTotal);
       })
       .catch((error) => {
         console.log(error);
       });
-  }
-
-  async function atualizaSaldo() {
+    var saldoFinal = saldoTotal - values.devSolicitado * 100;
+    console.log(saldoFinal);
     await axios
       .put("https://sistemaifrj.herokuapp.com/recargas/" + values.matricula2, {
-        saldo: values.saldo3 * 100,
+        saldo: saldoFinal,
       })
       .then((response) => {
         console.log("PUT Response:");
@@ -132,15 +117,18 @@ const CartaoRec = () => {
       .catch((error) => {
         console.log(error);
       });
-  }
-  
-  async function onSubmit(event) {
-    event.preventDefault();
-    console.log(values.saldo * 100);
-    console.log(values.saldo2 * 100);
-    console.log(values.saldo3 * 100);
-    criaRecarga();
-    atualizaSaldo();
+    await axios
+      .post("https://sistemaifrj.herokuapp.com/recargas/" + values.matricula2, {
+        modo_pagto: "dinheiro",
+        valor_recarga: values.devSolicitado * -100,
+      })
+      .then((response) => {
+        console.log("POST Response:");
+        console.log(response);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
 
     //   axios
     //     .put("https://sistemaifrj.herokuapp.com/recargas/" + values.matricula2, {
@@ -182,36 +170,51 @@ const CartaoRec = () => {
     });
   }
 
-  function OnChangeSelect(event){
-    event.preventDefault();
-    console.log(event.target.value)
-    setValues({
-      ...values,
-      ["modo"]: event.target.value
-    })
-  }
-  function Exibir(event){
-    event.preventDefault();
-    console.log(values)
+  async function OnChangeDev(event) {
+    var valorSolicitado = parseInt(
+      event.target.value.replace("DevoluçãoR$ ", "").replace(/[\.,]+/g, "")
+    );
+    var valorDisponivel = values.disponivelDev * 100;
+    console.log(valorSolicitado + "  " + valorDisponivel);
+    if (valorSolicitado > valorDisponivel) {
+      console.log(valorAntigo);
+      setValues({
+        ...values,
+        ["devSolicitado"]: valorAntigo / 100,
+      });
+      store.addNotification({
+        title: "Erro!",
+        message:
+          "O valor de devolução solicitado não pode exeder o valor disponível!.",
+        type: "warning",
+        container: "top-right",
+        insert: "top",
+        animationIn: ["animate__animated", "animate__fadeIn"],
+        animationOut: ["animate__animated", "animate__fadeOut"],
+        dismiss: {
+          duration: 3000,
+          showIcon: true,
+        },
+      });
+    } else {
+      valorAntigo = valorSolicitado;
+      setValues({
+        ...values,
+        ["devSolicitado"]: valorSolicitado / 100,
+      });
+    }
   }
 
-  async function somaValor(event) {
+  function Exibir(event) {
     event.preventDefault();
-
-    somaRecarga = somaRecarga + parseInt(event.target.name) * 100;
-    var somaLocal = somaRecarga / 100;
-    setValues({
-      ...values,
-      ["saldo2"]: somaLocal,
-      ["saldo3"]: values.saldo + somaLocal,
-    });
+    console.log(values);
   }
 
   return (
     <div>
       <ReactNotification />
       <Sidebar />
-      <label>asdasasdasdadsasdasddaadsdasads</label>
+      <label>yuiyuiyuiyuiyuiyuiyu</label>
       <div className="espacar">
         <form onSubmit={onSubmit}>
           <div>
@@ -224,79 +227,27 @@ const CartaoRec = () => {
               onChange={OnChange}
             />
           </div>
-          <div>
-            <input
-              disabled
-              id="nomeRecCartao"
-              type="text"
-              name="nome"
-              placeholder="Nome Completo"
-              value={values.nome}
-              onChange={OnChange}
-            />
-          </div>
-
-          <div>
-            <input
-              disabled
-              id="emailRecCartao"
-              type="text"
-              name="email"
-              placeholder="E-mail"
-              value={values.email}
-              onChange={OnChange}
-            />
-          </div>
-          <button name="5" onClick={somaValor}>
-            R$ 5
-          </button>
-          <button name="10" onClick={somaValor}>
-            R$ 10
-          </button>
-          <button name="20" onClick={somaValor}>
-            R$ 20
-          </button>
-          <button name="50" onClick={somaValor}>
-            R$ 50
-          </button>
-          <button name="100" onClick={somaValor}>
-            R$ 100
-          </button>
-
           <CurrencyInput
-            prefix="ValorRecargaR$ "
-            decimalSeparator=","
-            thousandSeparator="."
-            placeholder="Saldo"
-            name="saldo2"
-            id="saldo2AltCartao2"
-            value={values.saldo2}
-            onChangeEvent={OnChange}
-          />
-          <CurrencyInput
-            prefix="SaldoAtualR$ "
-            decimalSeparator=","
-            thousandSeparator="."
-            placeholder="Saldo"
-            name="saldo"
-            id="saldoAltCartao"
-            value={values.saldo}
-            onChangeEvent={OnChange}
-          />
-          <CurrencyInput
-            prefix="PosRecargaR$ "
+            prefix="DisponivelR$ "
             decimalSeparator=","
             thousandSeparator="."
             placeholder="Saldo"
             name="saldo"
             id="saldo3AltCartao"
-            value={values.saldo3}
+            value={values.disponivelDev}
             onChangeEvent={OnChange}
           />
-          <select onChange={OnChangeSelect}>
-            <option value="dinheiro">Dinheiro</option>
-            <option value="cartao">Cartão</option>
-          </select>
+          <CurrencyInput
+            prefix="DevoluçãoR$ "
+            decimalSeparator=","
+            thousandSeparator="."
+            placeholder="Saldo"
+            name="devSolicitado"
+            id="saldo3AltCartao"
+            value={values.devSolicitado}
+            onChangeEvent={OnChangeDev}
+          />
+
           <button onClick={Exibir}>ExibirValues</button>
           <button type="submit">Salvar</button>
 
@@ -312,4 +263,4 @@ const CartaoRec = () => {
   );
 };
 
-export default CartaoRec;
+export default CartaoDev;

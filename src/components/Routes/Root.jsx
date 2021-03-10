@@ -13,13 +13,18 @@ import AdminAlt from '../../pages/Admin/AdminAlt.js'
 import CartaoAdd from '../../pages/Card/CartaoAdd.js'
 import CartaoAlt from '../../pages/Card/CartaoAlt.js'
 import CartaoRec from '../../pages/Card/CartaoRec.js'
+import CartaoDev from '../../pages/Card/CartaoDev.js'
 import ProAdd from '../../pages/Products/ProAdd.js'
 import ProAlt from '../../pages/Products/ProAlt.js'
 import VenAdd from '../../pages/Seller/VendAdd.js'
 import VenAcessos from '../../pages/Seller/VendAcessos.js'
 import DepAdd from '../../pages/Dep/DepAdd.js'
+import DepAlt from '../../pages/Dep/DepAlt.js'
+
+
 
 const PagesRoot = () => (
+  
   <Router>
     <StoreProvider>
       <Switch>
@@ -29,10 +34,12 @@ const PagesRoot = () => (
         <RoutesPrivate path="/cartao/add" component={CartaoAdd} />
         <RoutesPrivate path="/cartao/alt" component={CartaoAlt} />
         <RoutesPrivate path="/cartao/rec" component={CartaoRec} />
+        <RoutesPrivate path="/cartao/dev" component={CartaoDev} />
         <RoutesPrivate path="/produto/add" component={ProAdd} />
         <RoutesPrivate path="/produto/alt" component={ProAlt} />
         <RoutesPrivate path="/vendedor/add" component={VenAdd} />
         <RoutesPrivate path="/departamento/add" component={DepAdd}/>
+        <RoutesPrivate path="/departamento/alt" component={DepAlt}/>
         <RoutesPrivate path="/vendedor/acessos" component={VenAcessos}/>
         <RoutesPrivate path="/" component={Home} />
       </Switch>

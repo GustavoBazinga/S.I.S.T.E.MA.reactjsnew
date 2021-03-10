@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-import "./adminalt.css";
+import "../Admin/adminalt.css";
 
 import axios from "axios";
 
@@ -17,12 +17,9 @@ import "animate.css";
 
 function initialState() {
   return {
-    login: "",
     nome: "",
-    email: "",
-    crpsenha: "",
-    login2: "",
-    crpsenhax: "",
+    categoria: "",
+    nome2: "",
   };
 }
 
@@ -33,25 +30,21 @@ const AdminAlt = () => {
     event.preventDefault();
 
     console.log(values);
-    if (values.login2 !== "") {
+    if (values.nome2 !== "") {
       axios
-        .get("https://sistemaifrj.herokuapp.com/admins/f/" + values.login2)
+        .get("https://sistemaifrj.herokuapp.com/departamento/" + values.nome2)
         .then((response) => {
           console.log(response);
-          document.getElementById("login2AltAdm").disabled = true;
-          document.getElementById("nomeAltAdm").disabled = false;
-          document.getElementById("emailAltAdm").disabled = false;
-          document.getElementById("loginAltAdm").disabled = false;
-          document.getElementById("passwordAltAdm").disabled = false;
-          document.getElementById("passwordConfirmedAltAdm").disabled = false;
+          document.getElementById("nomeAltDep").disabled = false;
+          document.getElementById("categoriaAltDep").disabled = false;
+          document.getElementById("nome2AltDep").disabled = true;
           OnFound({
             valueNome: response.data.nome,
-            valueLogin: response.data.login,
-            valueEmail: response.data.email,
+            valueCategoria: response.data.categoria,
           });
           store.addNotification({
             title: "Localizado!",
-            message: "Administrador localizado e dados exibidos!",
+            message: "Departamento localizado e dados exibidos!",
             type: "default",
             container: "top-right",
             insert: "top",
@@ -68,9 +61,9 @@ const AdminAlt = () => {
         });
     } else {
       store.addNotification({
-        title: "Não foi possível localizar o adminstrador!",
+        title: "Não foi possível localizar o departamento!",
         message:
-          "O campo de busca está vazio. Digite o Login do Administrador desejado e tente novamente.",
+          "O campo de busca está vazio. Digite o nome do departamento desejado e tente novamente.",
         type: "warning",
         container: "top-right",
         insert: "top",
@@ -84,62 +77,36 @@ const AdminAlt = () => {
     }
   }
 
-  function OnFound({ valueNome, valueLogin, valueEmail }) {
+  function OnFound({ valueNome, valueCategoria}) {
     setValues({
       ...values,
       ["nome"]: valueNome,
-      ["login"]: valueLogin,
-      ["email"]: valueEmail,
+      ["categoria"]: valueCategoria,
     });
   }
 
   function clearMan() {
     setValues(initialState);
-    document.getElementById("login2AltAdm").disabled = false;
-    document.getElementById("nomeAltAdm").disabled = true;
-    document.getElementById("emailAltAdm").disabled = true;
-    document.getElementById("loginAltAdm").disabled = true;
-    document.getElementById("passwordAltAdm").disabled = true;
-    document.getElementById("passwordConfirmedAltAdm").disabled = true;
+    document.getElementById("nome2AltDep").disabled = false;
+    document.getElementById("nomeAltDep").disabled = true;
+    document.getElementById("categoriaAltDep").disabled = true;
+
   }
 
   function onSubmit(event) {
     event.preventDefault();
-    if (document.getElementById("login2AltAdm").disabled) {
+    if (document.getElementById("nome2AltDep").disabled) {
       if (
         values.nome !== "" &&
-        values.login !== "" &&
-        values.email !== "" &&
-        values.crpsenha !== "" &&
-        values.crpsenhax !== ""
+        values.categoria !== ""
       ) {
-        if (values.crpsenha !== values.crpsenhax) {
-          store.addNotification({
-            title: "Falha!",
-            message: "Digite uma senha igual, seu nóia!",
-            type: "warning",
-            container: "top-right",
-            insert: "top",
-            animationIn: ["animate__animated", "animate__fadeIn"],
-            animationOut: ["animate__animated", "animate__fadeOut"],
-            dismiss: {
-              duration: 3000,
-              showIcon: true,
-            },
-          });
-        } else {
           axios
-            .put("https://sistemaifrj.herokuapp.com/admins/" + values.login2, {
-              nome: values.nome,
-              login: values.login,
-              email: values.email,
-              crpsenha: values.crpsenha,
-            })
+            .put("https://sistemaifrj.herokuapp.com/departamento/" + values.nome2, values)
             .then((response) => {
               console.log(response);
               store.addNotification({
                 title: "Cadastro atualizado",
-                message: "Adminstrador atualizado com sucesso!",
+                message: "Departamento atualizado com sucesso!",
                 type: "success",
                 container: "top-right",
                 insert: "top",
@@ -155,7 +122,7 @@ const AdminAlt = () => {
             .catch((error) => {
               console.log(error);
             });
-        }
+        
       }else{
         store.addNotification({
           title: "Falha!",
@@ -175,7 +142,7 @@ const AdminAlt = () => {
       store.addNotification({
         title: "Atualização bloqueada!",
         message:
-          "É preciso localizar um administrador antes de tentar atualizar. Tente novamente.",
+          "É preciso localizar um departamento antes de tentar atualizar. Tente novamente.",
         type: "danger",
         container: "top-right",
         insert: "top",
@@ -192,15 +159,15 @@ const AdminAlt = () => {
   async function onDelete(event) {
     event.preventDefault();
     console.log("ASDASDASD");
-    console.log(document.getElementById("login2AltAdm").disabled);
-    if (document.getElementById("login2AltAdm").disabled) {
+    
+    if (document.getElementById("nome2AltDep").disabled) {
       axios
-        .delete("https://sistemaifrj.herokuapp.com/admins/l/" + values.login2)
+        .delete("https://sistemaifrj.herokuapp.com/departamento/" + values.nome2)
         .then((response) => {
           console.log(response);
           store.addNotification({
             title: "Exclusão realizada",
-            message: "Adminstrador excluído com sucesso!",
+            message: "Departamento excluído com sucesso!",
             type: "success",
             container: "top-right",
             insert: "top",
@@ -220,7 +187,7 @@ const AdminAlt = () => {
       store.addNotification({
         title: "Exclusão bloqueada!",
         message:
-          "É preciso localizar um adminstrador antes de tentar excluir. Tente novamente.",
+          "É preciso localizar um departamento antes de tentar excluir. Tente novamente.",
         type: "danger",
         container: "top-right",
         insert: "top",
@@ -232,8 +199,6 @@ const AdminAlt = () => {
         },
       });
     }
-
-    document.getElementById("login2AltAdm").disabled = false;
   }
 
   function OnChange(event) {
@@ -311,7 +276,7 @@ const AdminAlt = () => {
       marginTop: "2ch",
     },
     email: {
-      width: "38ch",
+      width: "80ch",
       marginTop: "2ch",
     },
     senha: {
@@ -336,15 +301,14 @@ const AdminAlt = () => {
       </div>
       <form onSubmit={onSubmit} className={classes.root}>
         <TextField
-          id="login2AltAdm"
-          name="login2"
-          value={values.login2}
+          id="nome2AltDep"
+          name="nome2"
+          value={values.nome2}
           onChange={OnChange}
-          label="Login de Busca"
+          label="Nome do Departamento para busca"
           variant="outlined"
           className={classes.login2}
         />
-
         <Button
           variant="contained"
           onClick={toFind}
@@ -354,63 +318,24 @@ const AdminAlt = () => {
         </Button>
         <TextField
           disabled
-          id="nomeAltAdm"
+          id="nomeAltDep"
           name="nome"
           value={values.nome}
-          onChange={OnChange}
-          label="Nome Completo"
+          label="Nome do Departamento"
           variant="outlined"
           className={classes.nome}
           onChange={OnChange}
         />
         <TextField
           disabled
-          id="emailAltAdm"
-          label="E-mail"
-          name="email"
-          value={values.email}
-          onChange={OnChange}
+          id="categoriaAltDep"
+          label="Categoria do Departamento"
+          name="categoria"
+          value={values.categoria}
           className={classes.email}
           variant="outlined"
           onChange={OnChange}
         />
-        <TextField
-          disabled
-          id="loginAltAdm"
-          name="login"
-          value={values.login}
-          onChange={OnChange}
-          label="Login"
-          variant="outlined"
-          className={classes.login}
-          onChange={OnChange}
-        />
-
-        <TextField
-          disabled
-          id="passwordAltAdm"
-          type="password"
-          label="Senha"
-          name="crpsenha"
-          value={values.crpsenha}
-          onChange={OnChange}
-          className={classes.senha}
-          variant="outlined"
-          onChange={OnChange}
-        />
-        <TextField
-          disabled
-          id="passwordConfirmedAltAdm"
-          type="password"
-          name="crpsenhax"
-          value={values.crpsenhax}
-          onChange={OnChange}
-          label="Confirmar Senha"
-          className={classes.senhaConfirmar}
-          variant="outlined"
-          onChange={OnChange}
-        />
-
         <div className="buttonGeral">
           <Button
             variant="contained"

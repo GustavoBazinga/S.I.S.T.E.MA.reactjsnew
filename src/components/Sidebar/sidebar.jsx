@@ -88,7 +88,7 @@ function Sidebar() {
                   </MenuItem>
                   <MenuItem>
                     Devolução
-                    <Link to="/cartao/add" />
+                    <Link to="/cartao/dev" />
                   </MenuItem>
                 </SubMenu>
               </SubMenu>

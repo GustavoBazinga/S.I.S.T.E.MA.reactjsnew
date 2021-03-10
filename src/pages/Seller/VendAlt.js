@@ -33,7 +33,7 @@ const VenAlt = () => {
     event.preventDefault();
 
     console.log(values);
-    if (values.login2 !== "") {
+    if (values.matricula2 !== "") {
       axios
         .get("https://sistemaifrj.herokuapp.com/vendedores/f/" + values.matricula2)
         .then((response) => {
@@ -68,7 +68,7 @@ const VenAlt = () => {
         });
     } else {
       store.addNotification({
-        title: "Não foi possível localizar o adminstrador!",
+        title: "Não foi possível localizar o vendedor!",
         message:
           "O campo de busca está vazio. Digite o Login do Administrador desejado e tente novamente.",
         type: "warning",

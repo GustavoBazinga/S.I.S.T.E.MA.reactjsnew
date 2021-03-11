@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import "../Admin/adminalt.css";
 
@@ -29,6 +29,12 @@ function initialState() {
 
 const AdminAlt = () => {
   const [values, setValues] = useState(initialState);
+
+  useEffect(() => {
+    document.getElementById("nomeAltDep").disabled = true;
+    document.getElementById("categoriaAltDep").disabled = true;
+    document.getElementById("nome2AltDep").disabled = false;
+  }, [])
 
   function toFind(event) {
     event.preventDefault();
@@ -346,7 +352,6 @@ const AdminAlt = () => {
           Localizar
         </Button>
         <TextField
-          disabled
           id="nomeAltDep"
           name="nome"
           value={values.nome}
@@ -360,7 +365,6 @@ const AdminAlt = () => {
           
             <InputLabel id="demo-simple-select-filled-label">Categoria</InputLabel>
             <Select
-              
               labelId="demo-simple-select-filled-label"
               id="categoriaAltDep"
               value={categ}

@@ -65,6 +65,8 @@ function NumberFormatCustom(props) {
 
 const CartaoRec = () => {
   const [values, setValues] = useState(initialState);
+  const [modoPgt, setModoPgt] = React.useState("");
+
   var atual = values.saldo;
 
   function toFind(event) {
@@ -175,39 +177,12 @@ const CartaoRec = () => {
     console.log(values.saldo * 100);
     console.log(values.saldo2 * 100);
     console.log(values.saldo3 * 100);
+    console.log(modoPgt)
+    console.log(values.modo)
     criaRecarga();
     atualizaSaldo();
 
-    //   axios
-    //     .put("https://sistemaifrj.herokuapp.com/recargas/" + values.matricula2, {
-    //       nome: values.nome,
-    //       matricula: values.matricula,
-    //       email: values.email,
-    //       saldo: values.saldo,
-    //     })
-    //     .then((response) => {
-    //       console.log(response)
-    //     })
-    //     .catch((error) => {
-    //       console.log(error);
-    //     });
-    // }
-    //else {
-    //   store.addNotification({
-    //     title: "Atualização bloqueada!",
-    //     message:
-    //       "É preciso localizar um cartão antes de tentar atualizar. Tente novamente.",
-    //     type: "danger",
-    //     container: "top-right",
-    //     insert: "top",
-    //     animationIn: ["animate__animated", "animate__flash"],
-    //     animationOut: ["animate__animated", "animate__fadeOut"],
-    //     dismiss: {
-    //       duration: 3000,
-    //       showIcon: true,
-    //     },
-    //   });
-    //    }
+    
   }
 
   async function OnChange(event) {
@@ -216,12 +191,10 @@ const CartaoRec = () => {
       ...values,
       [name]: value,
     });
-    if (name == "saldo2"){
-      somaRecarga = parseFloat(value)
-      await somaValor(somaRecarga, true)
-  }
- 
-
+    if (name == "saldo2") {
+      somaRecarga = parseFloat(value);
+      await somaValor(somaRecarga, true);
+    }
   }
 
   function OnChangeSelect(event) {
@@ -232,16 +205,12 @@ const CartaoRec = () => {
       ["modo"]: event.target.value,
     });
   }
-  function Exibir(event) {
-    event.preventDefault();
-    console.log(values);
-  }
 
   async function somaValor(valor, jump) {
     if (!jump) somaRecarga = somaRecarga + valor;
-    else somaRecarga = valor
-      await setValues({
-        ...values,
+    else somaRecarga = valor;
+    await setValues({
+      ...values,
       ["saldo2"]: somaRecarga,
       ["saldo3"]: values.saldo + somaRecarga,
     });
@@ -281,7 +250,7 @@ const CartaoRec = () => {
     btnLocalizar: {
       width: "16.8ch",
       marginLeft: "1ch",
-      height: '7ch',
+      height: "7ch",
     },
     buttonSalvar: {
       "&:hover": {
@@ -361,17 +330,10 @@ const CartaoRec = () => {
     },
   }));
 
-  const [modoPgt, setModoPgt] = React.useState('');
 
   const handleChange = (event) => {
     setModoPgt(event.target.value);
-    values.modo= event.target.value
-    if(values.categoria != ""){
-      console.log(values.modo)
-    }else{
-      console.log("Não leu ainda")
-    }
-    
+    values.modo = event.target.value;
   };
 
   const classes = useStyles();

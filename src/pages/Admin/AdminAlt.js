@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import "./adminalt.css";
 
@@ -15,10 +15,6 @@ import ButtonGroup from "@material-ui/core/ButtonGroup";
 import Button from "@material-ui/core/Button";
 import "animate.css";
 
-
-
-
-
 function initialState() {
   return {
     login: "",
@@ -32,6 +28,16 @@ function initialState() {
 
 const AdminAlt = () => {
   const [values, setValues] = useState(initialState);
+
+  useEffect(() => {
+    document.getElementById("login2AltAdm").disabled = false;
+    document.getElementById("nomeAltAdm").disabled = true;
+    document.getElementById("emailAltAdm").disabled = true;
+    document.getElementById("loginAltAdm").disabled = true;
+    document.getElementById("passwordAltAdm").disabled = true;
+    document.getElementById("passwordConfirmedAltAdm").disabled = true;
+ 
+}, [])
 
   function toFind(event) {
     event.preventDefault();
@@ -160,7 +166,7 @@ const AdminAlt = () => {
               console.log(error);
             });
         }
-      }else{
+      } else {
         store.addNotification({
           title: "Falha!",
           message: "Preencha todos os campos do formulário!",
@@ -272,8 +278,8 @@ const AdminAlt = () => {
     btnLocalizar: {
       width: "16.8ch",
       marginLeft: "1ch",
-      
-      height: '7ch',
+
+      height: "7ch",
     },
     buttonSalvar: {
       "&:hover": {
@@ -296,12 +302,10 @@ const AdminAlt = () => {
     buttonLimpar: {
       backgroundColor: "white",
       marginTop: "2ch",
-      
     },
 
     login2: {
       width: "64.7ch",
-     
     },
 
     nome: {
@@ -334,6 +338,9 @@ const AdminAlt = () => {
   const classes = useStyles();
   return (
     <div>
+      <script type="text/javascript">;
+      onLoaded()
+      </script>
       <ReactNotification />
       <div className="sidebarAdmAlt">
         <Sidebar />
@@ -351,7 +358,6 @@ const AdminAlt = () => {
           variant="outlined"
           className={classes.login2}
         />
-
         <Button
           variant="contained"
           onClick={toFind}
@@ -360,7 +366,6 @@ const AdminAlt = () => {
           Localizar
         </Button>
         <TextField
-          disabled
           id="nomeAltAdm"
           name="nome"
           value={values.nome}
@@ -371,7 +376,6 @@ const AdminAlt = () => {
           onChange={OnChange}
         />
         <TextField
-          disabled
           id="emailAltAdm"
           label="E-mail"
           name="email"
@@ -382,7 +386,6 @@ const AdminAlt = () => {
           onChange={OnChange}
         />
         <TextField
-          disabled
           id="loginAltAdm"
           name="login"
           value={values.login}
@@ -394,7 +397,6 @@ const AdminAlt = () => {
         />
 
         <TextField
-          disabled
           id="passwordAltAdm"
           type="password"
           label="Senha"
@@ -406,7 +408,6 @@ const AdminAlt = () => {
           onChange={OnChange}
         />
         <TextField
-          disabled
           id="passwordConfirmedAltAdm"
           type="password"
           name="crpsenhax"

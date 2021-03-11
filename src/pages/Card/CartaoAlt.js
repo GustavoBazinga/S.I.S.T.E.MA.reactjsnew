@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import CurrencyInput from "react-currency-input";
 
@@ -50,6 +50,14 @@ function NumberFormatCustom(props) {
 
 const CartaoAlt = () => {
   const [values, setValues] = useState(initialState);
+
+  useEffect(() => {
+    document.getElementById("matricula2AltCartao").disabled = false;
+    document.getElementById("nomeAltCartao").disabled = true;
+    document.getElementById("emailAltCartao").disabled = true;
+    document.getElementById("matriculaAltCartao").disabled = true;
+    document.getElementById("saldoAltCartao").disabled = true;
+  }, [])
 
   function toFind(event) {
     event.preventDefault();
@@ -338,7 +346,7 @@ const CartaoAlt = () => {
           Localizar
         </Button>
         <TextField
-          disabled
+          
           id="nomeAltCartao"
           name="nome"
           value={values.nome}
@@ -349,7 +357,7 @@ const CartaoAlt = () => {
           onChange={OnChange}
         />
         <TextField
-          disabled
+          
           id="emailAltCartao"
           label="E-mail"
           name="email"
@@ -360,7 +368,7 @@ const CartaoAlt = () => {
           onChange={OnChange}
         />
         <TextField
-          disabled
+          
           id="matriculaAltCartao"
           name="matricula"
           value={values.matricula}
@@ -371,7 +379,7 @@ const CartaoAlt = () => {
           onChange={OnChange}
         />
         <TextField
-          disabled
+          
           variant="outlined"
           label="Saldo"
           value={values.saldo}

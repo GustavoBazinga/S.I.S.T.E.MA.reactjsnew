@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 import "./productalt.css";
 
@@ -54,6 +54,14 @@ function NumberFormatCustom(props) {
 
 const ProAlt = () => {
   const [values, setValues] = useState(initialState);
+
+  useEffect(() =>{
+    document.getElementById("nome2AltProduct").disabled = false;
+    document.getElementById("nomeAltProduct").disabled = true;
+    document.getElementById("categoriaAltProduct").disabled = true;
+    document.getElementById("estoqueAltProduct").disabled = true;
+    document.getElementById("precoAltProduct").disabled = true;
+  }, [])
 
   function toFind(event) {
     event.preventDefault();
@@ -364,7 +372,6 @@ const ProAlt = () => {
 
         
         <TextField
-          disabled
           id="nomeAltProduct"
           name="nome"
           value={values.nome}

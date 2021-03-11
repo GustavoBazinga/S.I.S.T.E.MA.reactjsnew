@@ -20,15 +20,16 @@ import { makeStyles } from "@material-ui/core/styles";
 import ButtonGroup from "@material-ui/core/ButtonGroup";
 import Button from "@material-ui/core/Button";
 
-import PropTypes from 'prop-types';
+import PropTypes from "prop-types";
 
-import NumberFormat from 'react-number-format';
+import NumberFormat from "react-number-format";
+import { FaLastfmSquare } from "react-icons/fa";
 
 function initialState() {
   return {
     matricula2: "",
-    disponivelDev: "",
-    devSolicitado: "",
+    disponivelDev: 0,
+    devSolicitado: null,
   };
 }
 var valorAntigo = 0;
@@ -71,6 +72,8 @@ const CartaoDev = () => {
         .get("https://sistemaifrj.herokuapp.com/users/r/" + values.matricula2)
         .then((response) => {
           console.log(response);
+          document.getElementById("matricula2DevCartao").disabled = true;
+          document.getElementById("devSolicitadoCartao").disabled = false;
           OnFound({
             value: response.data,
           });
@@ -93,7 +96,7 @@ const CartaoDev = () => {
         });
     } else {
       store.addNotification({
-        title: "Não foi possível localizar o caartão!",
+        title: "Não foi possível localizar o cartão!",
         message:
           "O campo de busca está vazio. Digite o matrícula do cartão desejado e tente novamente.",
         type: "warning",
@@ -110,20 +113,17 @@ const CartaoDev = () => {
   }
 
   function OnFound({ value }) {
-    console.log(value);
     setValues({
       ...values,
       ["disponivelDev"]: value / 100,
     });
   }
 
-  function clearMan() {
+  async function clearMan() {
     setValues(initialState);
-    document.getElementById("matricula2AltCartao").disabled = false;
-    document.getElementById("nomeAltCartao").disabled = true;
-    document.getElementById("emailAltCartao").disabled = true;
-    document.getElementById("matriculaAltCartao").disabled = true;
-    document.getElementById("saldoAltCartao").disabled = true;
+    
+    document.getElementById("matricula2DevCartao").disabled = false;
+    document.getElementById("devSolicitadoCartao").disabled = true;
   }
 
   async function onSubmit(event) {
@@ -164,6 +164,7 @@ const CartaoDev = () => {
       .catch((error) => {
         console.log(error);
       });
+      window.location.reload();
 
     //   axios
     //     .put("https://sistemaifrj.herokuapp.com/recargas/" + values.matricula2, {
@@ -197,7 +198,6 @@ const CartaoDev = () => {
     //    }
   }
 
-
   function OnChange(event) {
     const { value, name } = event.target;
     setValues({
@@ -207,11 +207,10 @@ const CartaoDev = () => {
   }
 
   async function OnChangeDev(event) {
-    var valorSolicitado = parseInt(
-      event.target.value.replace("DevoluçãoR$ ", "").replace(/[\.,]+/g, "")
-    );
+    var valorSolicitado = event.target.value * 100;
+    console.log("Solicitado: " + valorSolicitado);
     var valorDisponivel = values.disponivelDev * 100;
-    console.log(valorSolicitado + "  " + valorDisponivel);
+    console.log(valorSolicitado + " A " + valorDisponivel);
     if (valorSolicitado > valorDisponivel) {
       console.log(valorAntigo);
       setValues({
@@ -239,6 +238,7 @@ const CartaoDev = () => {
         ["devSolicitado"]: valorSolicitado / 100,
       });
     }
+   
   }
 
   function Exibir(event) {
@@ -273,15 +273,14 @@ const CartaoDev = () => {
           borderColor: "gray",
         },
       },
-      "& .MuiFilledInput-underline:after":{
+      "& .MuiFilledInput-underline:after": {
         borderColor: "gray",
       },
-      
     },
     btnLocalizar: {
       width: "16.8ch",
       marginLeft: "1ch",
-      height: '7ch',
+      height: "7ch",
     },
     buttonSalvar: {
       "&:hover": {
@@ -292,17 +291,16 @@ const CartaoDev = () => {
       marginLeft: "1ch",
       marginTop: "2ch",
     },
-    
+
     buttonLimpar: {
-      
       backgroundColor: "white",
       marginTop: "2ch",
     },
 
-    GrupoButtons:{
+    GrupoButtons: {
       marginTop: "2ch",
-      
-      height:'6.2ch',
+
+      height: "6.2ch",
     },
 
     matricula2: {
@@ -327,43 +325,36 @@ const CartaoDev = () => {
       marginTop: "2ch",
       marginLeft: "4ch",
     },
-    saldo:{
-      marginTop:'2ch',
-     
-      
+    saldo: {
+      marginTop: "2ch",
     },
-    saldo3:{
-      marginTop:'2ch',
-      
-     
+    saldo3: {
+      marginTop: "2ch",
     },
-    saldo2:{
-      marginTop:'2ch',
+    saldo2: {
+      marginTop: "2ch",
       width: "38ch",
-      marginLeft:'-38ch',
-      
+      marginLeft: "-38ch",
     },
-    GrupoButtons1:{
-      width:'9.05ch',
+    GrupoButtons1: {
+      width: "9.05ch",
     },
-    GrupoButtons2:{
-      width:'9.05ch',
+    GrupoButtons2: {
+      width: "9.05ch",
     },
-    GrupoButtons3:{
-      width:'9.05ch',
+    GrupoButtons3: {
+      width: "9.05ch",
     },
-    GrupoButtons4:{
-      width:'9.05ch',
+    GrupoButtons4: {
+      width: "9.05ch",
     },
-    GrupoButtons5:{
-      width:'9.05ch',
+    GrupoButtons5: {
+      width: "9.05ch",
     },
     formControl: {
       minWidth: 120,
-      marginTop:'2ch',
-      
+      marginTop: "2ch",
     },
-    
   }));
 
   const classes = useStyles();
@@ -376,10 +367,9 @@ const CartaoDev = () => {
       <div className="titleCardDev">
         <h1>Devolução</h1>
       </div>
-      
-        <form onSubmit={onSubmit} className={classes.root}>
-          
-          <TextField
+
+      <form onSubmit={onSubmit} className={classes.root}>
+        <TextField
           id="matricula2DevCartao"
           name="matricula2"
           value={values.matricula2}
@@ -387,61 +377,63 @@ const CartaoDev = () => {
           label="Matricula de Busca"
           variant="outlined"
           className={classes.matricula2}
-          />
+        />
+        <Button
+          variant="contained"
+          onClick={toFind}
+          className={classes.btnLocalizar}
+        >
+          Localizar
+        </Button>
+
+        <TextField
+          disabled
+          variant="outlined"
+          label="Valor disponível"
+          value={values.disponivelDev}
+          onChange={OnChange}
+          name="saldo"
+          id="saldo3DevCartao"
+          className={classes.saldo3}
+          InputProps={{
+            inputComponent: NumberFormatCustom,
+          }}
+        />
+
+        <TextField
+          disabled
+          variant="outlined"
+          label="Devolução"
+          value={values.devSolicitado}
+          onChange={OnChangeDev}
+          name="devSolicitado"
+          id="devSolicitadoCartao"
+          className={classes.saldo}
+          InputProps={{
+            inputComponent: NumberFormatCustom,
+          }}
+        />
+
+        <div className="buttonGeral">
+          {/* <button type="button" className="btnLimpar">Limpar</button> */}
+          {/* <button type="button" className="btnSalvar">Salvar</button> */}
           <Button
             variant="contained"
-            onClick={toFind}
-            className={classes.btnLocalizar}
+            onClick={clearMan}
+            className={classes.buttonLimpar}
           >
-            Localizar
+            Limpar
           </Button>
-          
-          <TextField
-            disabled
-            variant="outlined"
-            label="Valor disponível"
-            value={values.disponivelDev}
-            onChange={OnChange}
-            name="saldo"
-            id="saldo3DevCartao"
-            className={classes.saldo3}
-            InputProps={{
-              inputComponent: NumberFormatCustom,
-            }}
-          />
-          
-          <TextField
-            disabled
-            variant="outlined"
-            label="Devolução"
-            value={values.devSolicitado}
-            onChange={OnChange}
-            name="devSolicitado"
-            id="devSolicitadoCartao"
-            className={classes.saldo}
-            InputProps={{
-              inputComponent: NumberFormatCustom,
-            }}
-          />
-
-          <div className="buttonGeral">
-            {/* <button type="button" className="btnLimpar">Limpar</button> */}
-            {/* <button type="button" className="btnSalvar">Salvar</button> */}
-            <Button variant="contained" onClick={clearMan} className={classes.buttonLimpar}>
-              Limpar
-            </Button>
-            <Button
-            type= "submit"
-              variant="contained"
-              color="primary"
-              className={classes.buttonSalvar}
-            >
-              Salvar
-            </Button>
-          </div>
-        </form>
-        
-      
+          <Button
+            type="submit"
+            variant="contained"
+            color="primary"
+            className={classes.buttonSalvar}
+          >
+            Salvar
+          </Button>
+        </div>
+      </form>
     </div>
   );
 };

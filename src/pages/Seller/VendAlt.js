@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 import "../Admin/adminalt.css";
 
@@ -28,6 +28,15 @@ function initialState() {
 
 const VenAlt = () => {
   const [values, setValues] = useState(initialState);
+
+  useEffect(() => {
+    document.getElementById("matricula2AltVen").disabled = false;
+          document.getElementById("nomeAltVen").disabled = true;
+          document.getElementById("emailAltVen").disabled = true;
+          document.getElementById("matriculaAltVen").disabled = true;
+          document.getElementById("passwordAltVen").disabled = true;
+          document.getElementById("passwordConfirmedAltVen").disabled = true;
+  })
 
   function toFind(event) {
     event.preventDefault();
@@ -349,7 +358,7 @@ const VenAlt = () => {
           Localizar
         </Button>
         <TextField
-          disabled
+          
           id="nomeAltVen"
           name="nome"
           value={values.nome}
@@ -360,7 +369,7 @@ const VenAlt = () => {
           onChange={OnChange}
         />
         <TextField
-          disabled
+    
           id="emailAltVen"
           label="E-mail"
           name="email"
@@ -371,7 +380,7 @@ const VenAlt = () => {
           onChange={OnChange}
         />
         <TextField
-          disabled
+
           id="matriculaAltVen"
           name="matricula"
           value={values.matricula}
@@ -382,7 +391,7 @@ const VenAlt = () => {
         />
 
         <TextField
-          disabled
+
           id="passwordAltVen"
           type="password"
           label="Senha"
@@ -393,7 +402,6 @@ const VenAlt = () => {
           variant="outlined"
         />
         <TextField
-          disabled
           id="passwordConfirmedAltVen"
           type="password"
           name="crpsenhax"

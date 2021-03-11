@@ -60,7 +60,7 @@ class VenAcesso extends React.Component {
           });
       }
     }
-
+    this.componentDidMount()
     //  const selectedDataStringPresentation = selectedData.map(node => node.nome + ' ' + node.login).join(', ');
     //  alert(`Selecionados: ${selectedDataStringPresentation}`);
   };

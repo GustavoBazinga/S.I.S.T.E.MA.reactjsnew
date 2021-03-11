@@ -19,19 +19,30 @@ import FilterNone from "@material-ui/icons/FilterNone";
 import axios from "axios";
 import "./Login.css";
 
-const useStyles = makeStyles((theme) => ({
-  Barr: {
-    WebkitAppRegion: "drag",
-    flexGrow: 1,
-    backgroundColor: "#303030",
-  },
-  menuButton: {
-    marginRight: theme.spacing(2),
-  },
-  title: {
-    flexGrow: 1,
-  },
-}));
+import TextField from "@material-ui/core/TextField";
+
+
+
+  // root: {
+    
+    
+  //   "& label.Mui-focused": {
+  //     color: "gray",
+  //   },
+  // },
+  
+  // Barr: {
+  //   WebkitAppRegion: "drag",
+  //   flexGrow: 1,
+  //   backgroundColor: "#303030",
+  // },
+  // menuButton: {
+  //   marginRight: theme.spacing(2),
+  // },
+  // title: {
+  //   flexGrow: 1,
+  // },
+
 
 //Função InitialState para iniciar os campos como vazios.
 function initialState() {
@@ -84,6 +95,42 @@ async function login({ login, senha }) {
 
 //Página
 const UserLogin = () => {
+
+  const useStyles = makeStyles((theme) => ({
+    root: {
+     
+
+     
+      
+      "& label.Mui-focused": {
+        color: "gray",
+      },
+
+      "& .MuiOutlinedInput-root": {
+        "&.Mui-focused fieldset": {
+          borderColor: "gray",
+        },
+      },
+      
+      
+    },
+    login:{
+      marginLeft:'2ch',
+      width:'26ch',
+      marginTop:'1ch',
+    },
+    senha:{
+      marginLeft:'2ch',
+      marginTop:'1ch',
+      width:'26ch',
+    },
+    forgetPassword:{
+      marginLeft:'17ch',
+      color:'gray',
+      fontSize:'1.5ch',
+    }
+   
+  }));
   const [values, setValues] = useState(initialState); //Valores dos campos.
   const [error, setError] = useState(null); //Erro retornado.
   const { setToken, setLoginC, setIdC } = useContext(StoreContext); //Função para estabelecer Token Global com Context.
@@ -120,9 +167,12 @@ const UserLogin = () => {
     setValues(initialState);
   }
 
+
+
+  
   //Página HTML
   return (
-      <div id="page-login">
+      <div className="page-login">
         <div className="logo">
           <img src={logoAnimated} width="500px" alt="" />
         </div>
@@ -133,40 +183,50 @@ const UserLogin = () => {
               <FaUserCircle size={88} />
             </div>
           </div>
-          <div className="square">
-            <form onSubmit={onSubmit} className="form_addAdmin">
-              <div className="input-login input-data">
-                <label>Login</label>
-                <input
-                  id="login"
-                  type="text"
-                  name="login"
-                  onChange={onChange}
-                  value={values.user}
-                />
-              </div>
-              <div className="input-password ">
-                <label>Senha</label>
-                <input
-                  id="senha"
-                  type="password"
-                  name="senha"
-                  onChange={onChange}
-                  value={values.password}
-                />
-              </div>
+          <div className="squareLogin">
+            <form onSubmit={onSubmit} className={classes.root} >
+              
+
+              <TextField 
+                id="login"
+                name="login"
+                value={values.login}
+                onChange={onChange}
+                label="Login"
+                variant="outlined"
+                className={classes.login}
+                
+              />
+              
+              <TextField
+              
+                id="senha"
+                type="password"
+                label="Senha"
+                name="senha"
+                value={values.password}
+                onChange={onChange}
+                className={classes.senha}
+                variant="outlined"
+              />
+              <div>
+                <a href="/" className={classes.forgetPassword}>
+                Esqueceu a senha?
+                </a>
+            </div>
               {error && <div className="user-login__error">{error}</div>}
+              
               <div className="enter-app">
                 <IoIosArrowForward
                   size="33px"
                   color="white"
                   onClick={onSubmit}
+                  
                 />
               </div>
+              
             </form>
-            <a href="/" className="forget-password">
-              Esqueceu a senha?
-            </a>
+            
           </div>
           <div className="help">
             <BiHelpCircle size="30px" color="white" />

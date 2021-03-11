@@ -11,7 +11,15 @@ import "react-notifications-component/dist/theme.css";
 import { store } from "react-notifications-component";
 import "animate.css";
 
-import Sidebar from "../../components/Sidebar/Sidebar.jsx";
+import Sidebar from "../../components/Sidebar/sidebar.jsx";
+
+
+import TextField from "@material-ui/core/TextField";
+import { makeStyles } from "@material-ui/core/styles";
+import ButtonGroup from "@material-ui/core/ButtonGroup";
+import Button from "@material-ui/core/Button";
+import Popper from '@material-ui/core/Popper';
+import Switch from '@material-ui/core/Switch';
 
 function initialState() {
   return { matricula: "", nome: "", email: "", crpsenha: "", crpsenhax: "" };
@@ -98,67 +106,178 @@ const VenAdd = () => {
     });
   }
 
+  const useStyles = makeStyles((theme) => ({
+    root: {
+      marginTop: "10ch",
+
+      "& > *": {
+        width: "80ch",
+        marginLeft: "35ch",
+        marginTop: "2ch",
+      },
+
+      "& div.buttonGeral": {
+        paddingLeft: "54.45ch",
+        marginTop:'1ch',
+        //marginTop: "-5ch",
+      },
+      "& button.btnLimpar": {
+        width: "12ch",
+        fontSize: "2.5ch",
+      },
+      "& button.btnSalvar": {
+        width: "12ch",
+        fontSize: "2.5ch",
+      },
+      "& label.Mui-focused": {
+        color: "gray",
+      },
+
+      "& .MuiOutlinedInput-root": {
+        "&.Mui-focused fieldset": {
+          borderColor: "gray",
+        },
+      },
+    },
+
+    email: {
+      width: "38ch",
+    },
+
+    paper: {
+      border: '1px solid',
+      padding: theme.spacing(1),
+      backgroundColor: theme.palette.background.paper,
+      width:'13ch',
+      borderRadius:'1ch',
+      
+    },
+    buttonSalvar: {
+      "&:hover": {
+        backgroundColor: "green",
+      },
+      backgroundColor: "gray",
+      width: "18ch",
+      marginLeft: "1ch",
+    },
+    buttonLimpar: {
+      backgroundColor: "white",
+    },
+
+    matricula: {
+      width: "38ch",
+      marginLeft: "4ch",
+    },
+    senha: {
+      width: "38ch",
+    },
+    senhaConfirmar: {
+      width: "38ch",
+      marginLeft: "4ch",
+    },
+    interruptor:{
+      width: "6.5ch",
+      marginLeft:'1ch',
+      marginTop:'0ch',
+    },
+    acesso:{
+      marginLeft:'102.5ch',
+      color:'#353839',
+      
+      
+    },
+  }));
+  const [anchorEl, setAnchorEl] = React.useState(null);
+
+  const handleClick = (event) => {
+    setAnchorEl(anchorEl ? null : event.currentTarget);
+  };
+
+  const open = Boolean(anchorEl);
+  const id = open ? 'simple-popper' : undefined;
+
+  const classes = useStyles();
+
   return (
     <div>
       <ReactNotification />
-      <Sidebar />
+      <div className="sidebarAddSeller">
+        <Sidebar />
+      </div>
+      <div className="titleSellerAdd">
+        <h1>Cadastrar Vendedor</h1>
+      </div>
 
-      <form onSubmit={onSubmit} className="form_addVend">
-        <div className="inputVendNome">
-          <input
-            type="text"
-            name="nome"
-            placeholder="Nome Completo"
-            value={values.nome}
-            onChange={OnChange}
-          />
-        </div>
-        <div className="inputVendEmail">
-          <input
-            type="text"
-            name="email"
-            placeholder="E-mail"
-            value={values.email}
-            onChange={OnChange}
-          />
-        </div>
-        <div className="inputVendMatricula">
-          <input
-            type="text"
-            name="matricula"
-            placeholder="Matrícula"
-            value={values.matricula}
-            onChange={OnChange}
-          />
-        </div>
-
-        <div className="inputVendSenha">
-          <input
-            type="password"
-            name="crpsenha"
-            placeholder="Senha"
-            value={values.crpsenha}
-            onChange={OnChange}
-          />
-        </div>
-        <div className="inputVendSenhaConfirmar">
-          <input
-            type="password"
-            name="crpsenhax"
-            placeholder="Confirmar Senha"
-            value={values.crpsenhax}
-            onChange={OnChange}
-          />
-        </div>
-
+      <form onSubmit={onSubmit} className={classes.root}>
+        
+        <TextField
+          id="outlined-basic"
+          name= "nome"
+          value = {values.nome}
+          onChange={OnChange}
+          label="Nome Completo"
+          variant="outlined"
+        />
+        
+        <TextField
+          id="outlined-basic"
+          label="E-mail"
+          name= "email"
+          value = {values.email}
+          onChange={OnChange}
+          className={classes.email}
+          variant="outlined"
+        />
         
 
-        <button type="submit" className="btnAddVend">
-          Salvar
-        </button>
-        <button type="button" className="btnAddVendLimpar" onClick={clearMan}>
-          Limpar
-        </button>
+        <TextField
+          id="outlined-basic"
+          label="Matrícula"
+          name= "matricula"
+          value = {values.matricula}
+          onChange={OnChange}
+          className={classes.matricula}
+          variant="outlined"
+        />
+
+        <TextField
+          id="outlined-basic"
+          type= "password"
+          label="Senha"
+          name= "crpsenha"
+          value = {values.crpsenha}
+          onChange={OnChange}
+          className={classes.senha}
+          variant="outlined"
+        />
+        
+        <TextField
+          id="outlined-basic"
+          type= "password"
+          name= "crpsenhax"
+          value = {values.crpsenhax}
+          onChange={OnChange}
+          label="Confirmar Senha"
+          className={classes.senhaConfirmar}
+          variant="outlined"
+        />
+        <label className={classes.acesso} >Acesso</label>
+        
+        <Switch className={classes.interruptor} color="primary"inputProps={{ 'aria-label': 'primary checkbox' }} />
+
+        <div className="buttonGeral">
+          <Button variant="contained" onClick={clearMan} className={classes.buttonLimpar}>
+            Limpar
+          </Button>
+          <Button
+          type= "submit"
+            variant="contained"
+            color="primary"
+            className={classes.buttonSalvar}
+          >
+            Salvar
+          </Button>
+        </div>
       </form>
     </div>
   );

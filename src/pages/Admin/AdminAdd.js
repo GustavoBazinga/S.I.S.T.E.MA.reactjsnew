@@ -7,7 +7,7 @@ import "./adminadd.css";
 
 import axios from "axios";
 
-import Sidebar from "../../components/Sidebar/Sidebar.jsx";
+import Sidebar from "../../components/Sidebar/sidebar.jsx";
 import ReactNotification from "react-notifications-component";
 import "react-notifications-component/dist/theme.css";
 import { store } from "react-notifications-component";

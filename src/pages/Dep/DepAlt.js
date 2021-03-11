@@ -4,7 +4,7 @@ import "../Admin/adminalt.css";
 
 import axios from "axios";
 
-import Sidebar from "../../components/Sidebar/Sidebar.jsx";
+import Sidebar from "../../components/Sidebar/sidebar.jsx";
 
 import ReactNotification from "react-notifications-component";
 import "react-notifications-component/dist/theme.css";
@@ -14,6 +14,10 @@ import { makeStyles } from "@material-ui/core/styles";
 import ButtonGroup from "@material-ui/core/ButtonGroup";
 import Button from "@material-ui/core/Button";
 import "animate.css";
+import FormControl from '@material-ui/core/FormControl';
+import Select from "@material-ui/core/Select";
+import MenuItem from "@material-ui/core/MenuItem";
+import InputLabel from "@material-ui/core/InputLabel";
 
 function initialState() {
   return {
@@ -41,6 +45,8 @@ const AdminAlt = () => {
           OnFound({
             valueNome: response.data.nome,
             valueCategoria: response.data.categoria,
+            
+            
           });
           store.addNotification({
             title: "Localizado!",
@@ -75,6 +81,7 @@ const AdminAlt = () => {
         },
       });
     }
+    
   }
 
   function OnFound({ valueNome, valueCategoria}) {
@@ -83,10 +90,12 @@ const AdminAlt = () => {
       ["nome"]: valueNome,
       ["categoria"]: valueCategoria,
     });
+    setCateg(valueCategoria);
   }
 
   function clearMan() {
     setValues(initialState);
+    setCateg('')
     document.getElementById("nome2AltDep").disabled = false;
     document.getElementById("nomeAltDep").disabled = true;
     document.getElementById("categoriaAltDep").disabled = true;
@@ -229,11 +238,14 @@ const AdminAlt = () => {
           borderColor: "gray",
         },
       },
+      "& .MuiFilledInput-underline:after":{
+        borderColor: "gray",
+      },
     },
     btnAdmLocalizar: {
       width: "16.8ch",
       marginLeft: "1ch",
-      marginTop: "2.4ch",
+      height: '7ch',
     },
     buttonSalvar: {
       "&:hover": {
@@ -258,7 +270,7 @@ const AdminAlt = () => {
       marginTop: "2ch",
     },
 
-    login2: {
+    nome2: {
       width: "64.7ch",
     },
 
@@ -275,7 +287,7 @@ const AdminAlt = () => {
       marginLeft: "4ch",
       marginTop: "2ch",
     },
-    email: {
+    categoria: {
       width: "80ch",
       marginTop: "2ch",
     },
@@ -288,7 +300,24 @@ const AdminAlt = () => {
       marginLeft: "4ch",
       marginTop: "2ch",
     },
+    formControl:{
+      marginTop:'2ch',
+    }
   }));
+
+  const [categ, setCateg] = React.useState('');
+
+  const handleChange = (event) => {
+    setCateg(event.target.value);
+    values.categoria= event.target.value
+    if(values.categoria != ""){
+      console.log(values.categoria)
+    }else{
+      console.log("Não leu ainda")
+    }
+    
+  };
+
   const classes = useStyles();
   return (
     <div>
@@ -307,7 +336,7 @@ const AdminAlt = () => {
           onChange={OnChange}
           label="Nome do Departamento para busca"
           variant="outlined"
-          className={classes.login2}
+          className={classes.nome2}
         />
         <Button
           variant="contained"
@@ -326,16 +355,22 @@ const AdminAlt = () => {
           className={classes.nome}
           onChange={OnChange}
         />
-        <TextField
-          disabled
-          id="categoriaAltDep"
-          label="Categoria do Departamento"
-          name="categoria"
-          value={values.categoria}
-          className={classes.email}
-          variant="outlined"
-          onChange={OnChange}
-        />
+        
+        <FormControl variant="filled" className={classes.formControl}>
+          
+            <InputLabel id="demo-simple-select-filled-label">Categoria</InputLabel>
+            <Select
+              
+              labelId="demo-simple-select-filled-label"
+              id="categoriaAltDep"
+              value={categ}
+              onChange={handleChange}
+            >
+              <MenuItem value="Doce">Doce</MenuItem>
+              <MenuItem value="Salgado">Salgado</MenuItem>
+              
+            </Select>
+          </FormControl>
         <div className="buttonGeral">
           <Button
             variant="contained"

@@ -4,7 +4,7 @@ import "./adminalt.css";
 
 import axios from "axios";
 
-import Sidebar from "../../components/Sidebar/Sidebar.jsx";
+import Sidebar from "../../components/Sidebar/sidebar.jsx";
 
 import ReactNotification from "react-notifications-component";
 import "react-notifications-component/dist/theme.css";
@@ -14,6 +14,10 @@ import { makeStyles } from "@material-ui/core/styles";
 import ButtonGroup from "@material-ui/core/ButtonGroup";
 import Button from "@material-ui/core/Button";
 import "animate.css";
+
+
+
+
 
 function initialState() {
   return {
@@ -265,10 +269,11 @@ const AdminAlt = () => {
         },
       },
     },
-    btnAdmLocalizar: {
+    btnLocalizar: {
       width: "16.8ch",
       marginLeft: "1ch",
-      marginTop: "2.4ch",
+      
+      height: '7ch',
     },
     buttonSalvar: {
       "&:hover": {
@@ -291,10 +296,12 @@ const AdminAlt = () => {
     buttonLimpar: {
       backgroundColor: "white",
       marginTop: "2ch",
+      
     },
 
     login2: {
       width: "64.7ch",
+     
     },
 
     nome: {
@@ -348,7 +355,7 @@ const AdminAlt = () => {
         <Button
           variant="contained"
           onClick={toFind}
-          className={classes.btnAdmLocalizar}
+          className={classes.btnLocalizar}
         >
           Localizar
         </Button>

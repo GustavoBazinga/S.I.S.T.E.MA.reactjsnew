@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "./cartaorec.css";
+import "./cartaodev.css";
 
 import CurrencyInput from "react-currency-input";
 
@@ -12,17 +12,52 @@ import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
 import InputLabel from "@material-ui/core/InputLabel";
 
-import Sidebar from "../../components/Sidebar/Sidebar.jsx";
+import Sidebar from "../../components/Sidebar/sidebar.jsx";
 import { set } from "js-cookie";
+
+import TextField from "@material-ui/core/TextField";
+import { makeStyles } from "@material-ui/core/styles";
+import ButtonGroup from "@material-ui/core/ButtonGroup";
+import Button from "@material-ui/core/Button";
+
+import PropTypes from 'prop-types';
+
+import NumberFormat from 'react-number-format';
 
 function initialState() {
   return {
     matricula2: "",
-    disponivelDev: 0,
-    devSolicitado: 0,
+    disponivelDev: "",
+    devSolicitado: "",
   };
 }
 var valorAntigo = 0;
+
+function NumberFormatCustom(props) {
+  const { inputRef, onChange, ...other } = props;
+
+  return (
+    <NumberFormat
+      {...other}
+      getInputRef={inputRef}
+      onValueChange={(values) => {
+        onChange({
+          target: {
+            name: props.name,
+            value: values.value,
+          },
+        });
+      }}
+      fixedDecimalScale={true}
+      decimalScale={2}
+      thousandSeparator="."
+      decimalSeparator=","
+      isNumericString
+      prefix="R$"
+    />
+  );
+}
+
 const CartaoDev = () => {
   const [values, setValues] = useState(initialState);
   var atual = values.saldo;
@@ -211,55 +246,202 @@ const CartaoDev = () => {
     console.log(values);
   }
 
+  NumberFormatCustom.propTypes = {
+    inputRef: PropTypes.func.isRequired,
+    name: PropTypes.string.isRequired,
+    onChange: PropTypes.func.isRequired,
+  };
+
+  const useStyles = makeStyles((theme) => ({
+    root: {
+      marginTop: "10ch",
+
+      "& > *": {
+        width: "80ch",
+        marginLeft: "35ch",
+      },
+      "& div.buttonGeral": {
+        paddingLeft: "54.45ch",
+        //marginTop: "-5ch",
+      },
+      "& label.Mui-focused": {
+        color: "gray",
+      },
+
+      "& .MuiOutlinedInput-root": {
+        "&.Mui-focused fieldset": {
+          borderColor: "gray",
+        },
+      },
+      "& .MuiFilledInput-underline:after":{
+        borderColor: "gray",
+      },
+      
+    },
+    btnLocalizar: {
+      width: "16.8ch",
+      marginLeft: "1ch",
+      height: '7ch',
+    },
+    buttonSalvar: {
+      "&:hover": {
+        backgroundColor: "green",
+      },
+      backgroundColor: "#707070",
+      width: "18ch",
+      marginLeft: "1ch",
+      marginTop: "2ch",
+    },
+    
+    buttonLimpar: {
+      
+      backgroundColor: "white",
+      marginTop: "2ch",
+    },
+
+    GrupoButtons:{
+      marginTop: "2ch",
+      
+      height:'6.2ch',
+    },
+
+    matricula2: {
+      width: "64.7ch",
+    },
+
+    nome: {
+      "&:disabled": {
+        color: "white",
+      },
+      width: "38ch",
+      marginTop: "2ch",
+    },
+
+    matricula: {
+      width: "38ch",
+      marginLeft: "4ch",
+      marginTop: "2ch",
+    },
+    email: {
+      width: "38ch",
+      marginTop: "2ch",
+      marginLeft: "4ch",
+    },
+    saldo:{
+      marginTop:'2ch',
+     
+      
+    },
+    saldo3:{
+      marginTop:'2ch',
+      
+     
+    },
+    saldo2:{
+      marginTop:'2ch',
+      width: "38ch",
+      marginLeft:'-38ch',
+      
+    },
+    GrupoButtons1:{
+      width:'9.05ch',
+    },
+    GrupoButtons2:{
+      width:'9.05ch',
+    },
+    GrupoButtons3:{
+      width:'9.05ch',
+    },
+    GrupoButtons4:{
+      width:'9.05ch',
+    },
+    GrupoButtons5:{
+      width:'9.05ch',
+    },
+    formControl: {
+      minWidth: 120,
+      marginTop:'2ch',
+      
+    },
+    
+  }));
+
+  const classes = useStyles();
   return (
     <div>
       <ReactNotification />
-      <Sidebar />
-      <label>yuiyuiyuiyuiyuiyuiyu</label>
-      <div className="espacar">
-        <form onSubmit={onSubmit}>
-          <div>
-            <input
-              id="matricula2RecCartao"
-              type="text"
-              name="matricula2"
-              placeholder="Matricula de Busca"
-              value={values.matricula2}
-              onChange={OnChange}
-            />
-          </div>
-          <CurrencyInput
-            prefix="DisponivelR$ "
-            decimalSeparator=","
-            thousandSeparator="."
-            placeholder="Saldo"
-            name="saldo"
-            id="saldo3AltCartao"
-            value={values.disponivelDev}
-            onChangeEvent={OnChange}
-          />
-          <CurrencyInput
-            prefix="DevoluçãoR$ "
-            decimalSeparator=","
-            thousandSeparator="."
-            placeholder="Saldo"
-            name="devSolicitado"
-            id="saldo3AltCartao"
-            value={values.devSolicitado}
-            onChangeEvent={OnChangeDev}
-          />
-
-          <button onClick={Exibir}>ExibirValues</button>
-          <button type="submit">Salvar</button>
-
-          <button type="button" onClick={clearMan}>
-            Limpar
-          </button>
-        </form>
-        <form onSubmit={toFind}>
-          <button type="submit">Localizar</button>
-        </form>
+      <div className="sidebarCardDev">
+        <Sidebar />
       </div>
+      <div className="titleCardDev">
+        <h1>Devolução</h1>
+      </div>
+      
+        <form onSubmit={onSubmit} className={classes.root}>
+          
+          <TextField
+          id="matricula2DevCartao"
+          name="matricula2"
+          value={values.matricula2}
+          onChange={OnChange}
+          label="Matricula de Busca"
+          variant="outlined"
+          className={classes.matricula2}
+          />
+          <Button
+            variant="contained"
+            onClick={toFind}
+            className={classes.btnLocalizar}
+          >
+            Localizar
+          </Button>
+          
+          <TextField
+            disabled
+            variant="outlined"
+            label="Valor disponível"
+            value={values.disponivelDev}
+            onChange={OnChange}
+            name="saldo"
+            id="saldo3DevCartao"
+            className={classes.saldo3}
+            InputProps={{
+              inputComponent: NumberFormatCustom,
+            }}
+          />
+          
+          <TextField
+            disabled
+            variant="outlined"
+            label="Devolução"
+            value={values.devSolicitado}
+            onChange={OnChange}
+            name="devSolicitado"
+            id="devSolicitadoCartao"
+            className={classes.saldo}
+            InputProps={{
+              inputComponent: NumberFormatCustom,
+            }}
+          />
+
+          <div className="buttonGeral">
+            {/* <button type="button" className="btnLimpar">Limpar</button> */}
+            {/* <button type="button" className="btnSalvar">Salvar</button> */}
+            <Button variant="contained" onClick={clearMan} className={classes.buttonLimpar}>
+              Limpar
+            </Button>
+            <Button
+            type= "submit"
+              variant="contained"
+              color="primary"
+              className={classes.buttonSalvar}
+            >
+              Salvar
+            </Button>
+          </div>
+        </form>
+        
+      
     </div>
   );
 };

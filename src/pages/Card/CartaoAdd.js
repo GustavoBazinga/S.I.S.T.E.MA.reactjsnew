@@ -6,24 +6,61 @@ import CurrencyInput from "react-currency-input";
 
 import axios from "axios";
 
-import Sidebar from "../../components/Sidebar/Sidebar.jsx";
+import Sidebar from "../../components/Sidebar/sidebar.jsx";
 import ReactNotification from 'react-notifications-component'
 import 'react-notifications-component/dist/theme.css'
 import { store } from 'react-notifications-component';
 import "animate.css"
 import "./cartaoadd.css";
+import TextField from "@material-ui/core/TextField";
+import { makeStyles } from "@material-ui/core/styles";
+import ButtonGroup from "@material-ui/core/ButtonGroup";
+import Button from "@material-ui/core/Button";
+import PropTypes from 'prop-types';
 
+import NumberFormat from 'react-number-format';
 function initialState() {
   return {
     matricula: "",
     nome: "",
     email: "",
-    saldo: "0",
+    saldo: "",
   };
 }
 
+
+function NumberFormatCustom(props) {
+  const { inputRef, onChange, ...other } = props;
+
+  return (
+    <NumberFormat
+      {...other}
+      getInputRef={inputRef}
+      onValueChange={(values) => {
+        onChange({
+          target: {
+            name: props.name,
+            value: values.value,
+          },
+        });
+      }}
+      fixedDecimalScale={true}
+      decimalScale={2}
+      thousandSeparator="."
+      decimalSeparator=","
+      isNumericString
+      prefix="R$"
+    />
+  );
+}
+
+
 const CartaoAdd = () => {
+
+
   const [values, setValues] = useState(initialState);
+
+
 
   function clearMan() {
     setValues(initialState);
@@ -96,59 +133,138 @@ const CartaoAdd = () => {
     });
   }
 
+  NumberFormatCustom.propTypes = {
+    inputRef: PropTypes.func.isRequired,
+    name: PropTypes.string.isRequired,
+    onChange: PropTypes.func.isRequired,
+  };
+
+  
+
+  const useStyles = makeStyles((theme) => ({
+    root: {
+      marginTop: "10ch",
+
+      "& > *": {
+        width: "80ch",
+        marginLeft: "35ch",
+        marginTop: "2ch",
+      },
+
+      "& div.buttonGeral": {
+        paddingLeft: "54.45ch",
+        //marginTop: "-5ch",
+      },
+      "& button.btnLimpar": {
+        width: "12ch",
+        fontSize: "2.5ch",
+      },
+      "& button.btnSalvar": {
+        width: "12ch",
+        fontSize: "2.5ch",
+      },
+      "& label.Mui-focused": {
+        color: "gray",
+      },
+
+      "& .MuiOutlinedInput-root": {
+        "&.Mui-focused fieldset": {
+          borderColor: "gray",
+        },
+      },
+    },
+
+    email: {
+      width: "38ch",
+    },
+
+    buttonSalvar: {
+      "&:hover": {
+        backgroundColor: "green",
+      },
+      backgroundColor: "gray",
+      width: "18ch",
+      marginLeft: "1ch",
+    },
+    buttonLimpar: {
+      backgroundColor: "white",
+    },
+
+    matricula: {
+      width: "38ch",
+      marginLeft: "4ch",
+    },
+    saldo: {
+      width: "80ch",
+    },
+    
+  }));
+
+  const classes = useStyles();
+  
   return (
     <div>
       <ReactNotification />
-      <Sidebar />
-
-      <form onSubmit={onSubmit} className="form_addCartao">
-        <div className="inputCartaoNome">
-          <input
-            type="text"
-            name="nome"
-            placeholder="Nome Completo"
-            value={values.nome}
-            onChange={OnChange}
-          />
+      <div className="sidebarAddCard">
+        <Sidebar />
+      </div>
+      <div className="titleAdmCard">
+        <h1>Cadastrar Cartão</h1>
+      </div>
+      <form onSubmit={onSubmit} className={classes.root}>
+      <TextField
+          id="outlined-basic"
+          name= "nome"
+          value = {values.nome}
+          onChange={OnChange}
+          label="Nome Completo"
+          variant="outlined"
+        />
+        <TextField
+          id="outlined-basic"
+          label="E-mail"
+          name= "email"
+          value = {values.email}
+          onChange={OnChange}
+          className={classes.email}
+          variant="outlined"
+        />
+        <TextField
+          id="outlined-basic"
+          label="Matrícula"
+          name= "matricula"
+          value = {values.matricula}
+          onChange={OnChange}
+          className={classes.matricula}
+          variant="outlined"
+        />
+        <TextField
+          variant="outlined"
+          label="Saldo"
+          value={values.saldo}
+          onChange={OnChange}
+          name="saldo"
+          id="formatted-numberformat-input"
+          InputProps={{
+            inputComponent: NumberFormatCustom,
+          }}
+        />
+        <div className="buttonGeral">
+          {/* <button type="button" className="btnLimpar">Limpar</button> */}
+          {/* <button type="button" className="btnSalvar">Salvar</button> */}
+          <Button variant="contained" onClick={clearMan} className={classes.buttonLimpar}>
+            Limpar
+          </Button>
+          <Button
+          type= "submit"
+            variant="contained"
+            color="primary"
+            className={classes.buttonSalvar}
+          >
+            Salvar
+          </Button>
         </div>
-        <div className="inputCartaoEmail">
-          <input
-            type="text"
-            name="email"
-            placeholder="E-mail"
-            value={values.email}
-            onChange={OnChange}
-          />
-        </div>
-        <div className="inputCartaoMatricula">
-          <input
-            type="text"
-            name="matricula"
-            placeholder="Matrícula"
-            value={values.matricula}
-            onChange={OnChange}
-          />
-        </div>
-
-        <div className="inputCartaoSaldo">
-          <CurrencyInput
-            prefix="R$ "
-            decimalSeparator=","
-            thousandSeparator="."
-            placeholder="Saldo"
-            name="saldo"
-            
-            value={values.saldo}
-            onChangeEvent={OnChange}
-          />
-        </div>
-
-        <button type="submit" className="btnAddCartao">
-          Salvar
-        </button>
-        <button type="button" className="btnAddCartaoLimpar" onClick={clearMan}>
-          Limpar
-        </button>
+        
       </form>
     </div>
   );

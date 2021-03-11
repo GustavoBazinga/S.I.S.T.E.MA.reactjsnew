@@ -4,7 +4,7 @@ import "../Admin/adminalt.css";
 
 import axios from "axios";
 
-import Sidebar from "../../components/Sidebar/Sidebar.jsx";
+import Sidebar from "../../components/Sidebar/sidebar.jsx";
 
 import ReactNotification from "react-notifications-component";
 import "react-notifications-component/dist/theme.css";
@@ -261,10 +261,10 @@ const VenAlt = () => {
         },
       },
     },
-    btnAdmLocalizar: {
+    btnLocalizar: {
       width: "16.8ch",
       marginLeft: "1ch",
-      marginTop: "2.4ch",
+      height: '7ch',
     },
     buttonSalvar: {
       "&:hover": {
@@ -344,7 +344,7 @@ const VenAlt = () => {
         <Button
           variant="contained"
           onClick={toFind}
-          className={classes.btnAdmLocalizar}
+          className={classes.btnLocalizar}
         >
           Localizar
         </Button>
@@ -405,6 +405,8 @@ const VenAlt = () => {
           onChange={OnChange}
         />
 
+        
+
         <div className="buttonGeral">
           <Button
             variant="contained"
@@ -413,7 +415,7 @@ const VenAlt = () => {
           >
             Limpar
           </Button>
-
+      
           <Button
             type="button"
             variant="contained"

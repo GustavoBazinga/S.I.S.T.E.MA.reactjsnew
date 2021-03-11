@@ -11,23 +11,58 @@ import "animate.css";
 import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
 import InputLabel from "@material-ui/core/InputLabel";
-
-import Sidebar from "../../components/Sidebar/Sidebar.jsx";
+import FormControl from "@material-ui/core/FormControl";
+import Sidebar from "../../components/Sidebar/sidebar.jsx";
 import { set } from "js-cookie";
+
+import TextField from "@material-ui/core/TextField";
+import { makeStyles } from "@material-ui/core/styles";
+import ButtonGroup from "@material-ui/core/ButtonGroup";
+import Button from "@material-ui/core/Button";
+
+import PropTypes from "prop-types";
+
+import NumberFormat from "react-number-format";
 
 function initialState() {
   return {
     matricula: "",
     nome: "",
     email: "",
-    saldo: 0,
+    saldo: "",
     matricula2: "",
-    saldo2: 0,
-    saldo3: 0,
+    saldo2: "",
+    saldo3: "",
     modo: "",
   };
 }
 var somaRecarga = 0;
+
+function NumberFormatCustom(props) {
+  const { inputRef, onChange, ...other } = props;
+
+  return (
+    <NumberFormat
+      {...other}
+      getInputRef={inputRef}
+      onValueChange={(values) => {
+        onChange({
+          target: {
+            name: props.name,
+            value: values.value,
+          },
+        });
+      }}
+      fixedDecimalScale={true}
+      decimalScale={2}
+      thousandSeparator="."
+      decimalSeparator=","
+      isNumericString
+      prefix="R$"
+    />
+  );
+}
+
 const CartaoRec = () => {
   const [values, setValues] = useState(initialState);
   var atual = values.saldo;
@@ -98,11 +133,12 @@ const CartaoRec = () => {
 
   function clearMan() {
     setValues(initialState);
-    document.getElementById("matricula2AltCartao").disabled = false;
-    document.getElementById("nomeAltCartao").disabled = true;
-    document.getElementById("emailAltCartao").disabled = true;
-    document.getElementById("matriculaAltCartao").disabled = true;
-    document.getElementById("saldoAltCartao").disabled = true;
+    somaRecarga = 0;
+    // document.getElementById("matricula2AltCartao").disabled = false;
+    // document.getElementById("nomeAltCartao").disabled = true;
+    // document.getElementById("emailAltCartao").disabled = true;
+    // document.getElementById("matriculaAltCartao").disabled = true;
+    // document.getElementById("saldoAltCartao").disabled = true;
   }
 
   async function criaRecarga() {
@@ -133,7 +169,7 @@ const CartaoRec = () => {
         console.log(error);
       });
   }
-  
+
   async function onSubmit(event) {
     event.preventDefault();
     console.log(values.saldo * 100);
@@ -174,140 +210,350 @@ const CartaoRec = () => {
     //    }
   }
 
-  function OnChange(event) {
+  async function OnChange(event) {
     const { value, name } = event.target;
-    setValues({
+    await setValues({
       ...values,
       [name]: value,
     });
+    if (name == "saldo2"){
+      somaRecarga = parseFloat(value)
+      await somaValor(somaRecarga, true)
+  }
+ 
+
   }
 
-  function OnChangeSelect(event){
+  function OnChangeSelect(event) {
     event.preventDefault();
-    console.log(event.target.value)
+    console.log(event.target.value);
     setValues({
       ...values,
-      ["modo"]: event.target.value
-    })
+      ["modo"]: event.target.value,
+    });
   }
-  function Exibir(event){
+  function Exibir(event) {
     event.preventDefault();
-    console.log(values)
+    console.log(values);
   }
 
-  async function somaValor(event) {
-    event.preventDefault();
-
-    somaRecarga = somaRecarga + parseInt(event.target.name) * 100;
-    var somaLocal = somaRecarga / 100;
-    setValues({
-      ...values,
-      ["saldo2"]: somaLocal,
-      ["saldo3"]: values.saldo + somaLocal,
+  async function somaValor(valor, jump) {
+    if (!jump) somaRecarga = somaRecarga + valor;
+    else somaRecarga = valor
+      await setValues({
+        ...values,
+      ["saldo2"]: somaRecarga,
+      ["saldo3"]: values.saldo + somaRecarga,
     });
   }
 
+  NumberFormatCustom.propTypes = {
+    inputRef: PropTypes.func.isRequired,
+    name: PropTypes.string.isRequired,
+    onChange: PropTypes.func.isRequired,
+  };
+
+  const useStyles = makeStyles((theme) => ({
+    root: {
+      marginTop: "10ch",
+
+      "& > *": {
+        width: "80ch",
+        marginLeft: "35ch",
+      },
+      "& div.buttonGeral": {
+        paddingLeft: "54.45ch",
+        //marginTop: "-5ch",
+      },
+      "& label.Mui-focused": {
+        color: "gray",
+      },
+
+      "& .MuiOutlinedInput-root": {
+        "&.Mui-focused fieldset": {
+          borderColor: "gray",
+        },
+      },
+      "& .MuiFilledInput-underline:after": {
+        borderColor: "gray",
+      },
+    },
+    btnLocalizar: {
+      width: "16.8ch",
+      marginLeft: "1ch",
+      height: '7ch',
+    },
+    buttonSalvar: {
+      "&:hover": {
+        backgroundColor: "green",
+      },
+      backgroundColor: "#707070",
+      width: "18ch",
+      marginLeft: "1ch",
+      marginTop: "2ch",
+    },
+
+    buttonLimpar: {
+      backgroundColor: "white",
+      marginTop: "2ch",
+    },
+
+    GrupoButtons: {
+      marginTop: "2ch",
+
+      height: "6.2ch",
+    },
+
+    matricula2: {
+      width: "64.7ch",
+    },
+
+    nome: {
+      "&:disabled": {
+        color: "white",
+      },
+      width: "38ch",
+      marginTop: "2ch",
+    },
+
+    matricula: {
+      width: "38ch",
+      marginLeft: "4ch",
+      marginTop: "2ch",
+    },
+    email: {
+      width: "38ch",
+      marginTop: "2ch",
+      marginLeft: "4ch",
+    },
+    saldo: {
+      marginTop: "2ch",
+      width: "38ch",
+    },
+    saldo3: {
+      marginTop: "2ch",
+      width: "38ch",
+      marginLeft: "4ch",
+    },
+    saldo2: {
+      marginTop: "2ch",
+      width: "38ch",
+      marginLeft: "-38ch",
+    },
+    GrupoButtons1: {
+      width: "9.05ch",
+    },
+    GrupoButtons2: {
+      width: "9.05ch",
+    },
+    GrupoButtons3: {
+      width: "9.05ch",
+    },
+    GrupoButtons4: {
+      width: "9.05ch",
+    },
+    GrupoButtons5: {
+      width: "9.05ch",
+    },
+    formControl: {
+      minWidth: 120,
+      marginTop: "2ch",
+    },
+  }));
+
+  const [modoPgt, setModoPgt] = React.useState('');
+
+  const handleChange = (event) => {
+    setModoPgt(event.target.value);
+    values.modo= event.target.value
+    if(values.categoria != ""){
+      console.log(values.modo)
+    }else{
+      console.log("Não leu ainda")
+    }
+    
+  };
+
+  const classes = useStyles();
   return (
     <div>
       <ReactNotification />
-      <Sidebar />
-      <label>asdasasdasdadsasdasddaadsdasads</label>
-      <div className="espacar">
-        <form onSubmit={onSubmit}>
-          <div>
-            <input
-              id="matricula2RecCartao"
-              type="text"
-              name="matricula2"
-              placeholder="Matricula de Busca"
-              value={values.matricula2}
-              onChange={OnChange}
-            />
-          </div>
-          <div>
-            <input
-              disabled
-              id="nomeRecCartao"
-              type="text"
-              name="nome"
-              placeholder="Nome Completo"
-              value={values.nome}
-              onChange={OnChange}
-            />
-          </div>
-
-          <div>
-            <input
-              disabled
-              id="emailRecCartao"
-              type="text"
-              name="email"
-              placeholder="E-mail"
-              value={values.email}
-              onChange={OnChange}
-            />
-          </div>
-          <button name="5" onClick={somaValor}>
-            R$ 5
-          </button>
-          <button name="10" onClick={somaValor}>
-            R$ 10
-          </button>
-          <button name="20" onClick={somaValor}>
-            R$ 20
-          </button>
-          <button name="50" onClick={somaValor}>
-            R$ 50
-          </button>
-          <button name="100" onClick={somaValor}>
-            R$ 100
-          </button>
-
-          <CurrencyInput
-            prefix="ValorRecargaR$ "
-            decimalSeparator=","
-            thousandSeparator="."
-            placeholder="Saldo"
-            name="saldo2"
-            id="saldo2AltCartao2"
-            value={values.saldo2}
-            onChangeEvent={OnChange}
-          />
-          <CurrencyInput
-            prefix="SaldoAtualR$ "
-            decimalSeparator=","
-            thousandSeparator="."
-            placeholder="Saldo"
-            name="saldo"
-            id="saldoAltCartao"
-            value={values.saldo}
-            onChangeEvent={OnChange}
-          />
-          <CurrencyInput
-            prefix="PosRecargaR$ "
-            decimalSeparator=","
-            thousandSeparator="."
-            placeholder="Saldo"
-            name="saldo"
-            id="saldo3AltCartao"
-            value={values.saldo3}
-            onChangeEvent={OnChange}
-          />
-          <select onChange={OnChangeSelect}>
-            <option value="dinheiro">Dinheiro</option>
-            <option value="cartao">Cartão</option>
-          </select>
-          <button onClick={Exibir}>ExibirValues</button>
-          <button type="submit">Salvar</button>
-
-          <button type="button" onClick={clearMan}>
-            Limpar
-          </button>
-        </form>
-        <form onSubmit={toFind}>
-          <button type="submit">Localizar</button>
-        </form>
+      <div className="sidebarCardRec">
+        <Sidebar />
       </div>
+      <div className="titleCardRec">
+        <h1>Recarregar Cartão</h1>
+      </div>
+
+      <form onSubmit={onSubmit} className={classes.root}>
+        <TextField
+          id="matricula2RecCartao"
+          name="matricula2"
+          value={values.matricula2}
+          onChange={OnChange}
+          label="Matricula de Busca"
+          variant="outlined"
+          className={classes.matricula2}
+        />
+        <Button
+          variant="contained"
+          onClick={toFind}
+          className={classes.btnLocalizar}
+        >
+          Localizar
+        </Button>
+
+        <TextField
+          disabled
+          id="nomeRecCartao"
+          name="nome"
+          value={values.nome}
+          onChange={OnChange}
+          label="Nome Completo"
+          variant="outlined"
+          className={classes.nome}
+          onChange={OnChange}
+        />
+
+        <TextField
+          disabled
+          id="emailRecCartao"
+          label="E-mail"
+          name="email"
+          value={values.email}
+          onChange={OnChange}
+          className={classes.email}
+          variant="outlined"
+          onChange={OnChange}
+        />
+
+        <ButtonGroup
+          className={classes.GrupoButtons}
+          aria-label="outlined secondary button group"
+        >
+          <Button
+            name="R5"
+            onClick={() => {
+              somaValor(5, false);
+            }}
+            className={classes.GrupoButtons1}
+          >
+            R$5
+          </Button>
+          <Button
+            name="R10"
+            onClick={() => {
+              somaValor(10, false);
+            }}
+            className={classes.GrupoButtons2}
+          >
+            R$10
+          </Button>
+          <Button
+            name="R20"
+            onClick={() => {
+              somaValor(20, false);
+            }}
+            className={classes.GrupoButtons3}
+          >
+            R$20
+          </Button>
+          <Button
+            name="R50"
+            onClick={() => {
+              somaValor(50, false);
+            }}
+            className={classes.GrupoButtons4}
+          >
+            R$50
+          </Button>
+          <Button
+            name="R100"
+            onClick={() => {
+              somaValor(100, false);
+            }}
+            className={classes.GrupoButtons5}
+          >
+            R$100
+          </Button>
+        </ButtonGroup>
+
+        <TextField
+          variant="outlined"
+          label="Valor da Recarga"
+          value={values.saldo2}
+          onChange={OnChange}
+          name="saldo2"
+          id="saldo2RecCartao"
+          className={classes.saldo2}
+          InputProps={{
+            inputComponent: NumberFormatCustom,
+          }}
+        />
+
+        <TextField
+          disabled
+          variant="outlined"
+          label="Saldo Atual"
+          value={values.saldo}
+          onChange={OnChange}
+          name="saldo"
+          id="saldoRecCartao"
+          className={classes.saldo}
+          InputProps={{
+            inputComponent: NumberFormatCustom,
+          }}
+        />
+
+        <TextField
+          disabled
+          variant="outlined"
+          label="Pós Recarga"
+          value={values.saldo3}
+          onChange={OnChange}
+          name="saldo3"
+          id="saldo3RecCartao"
+          className={classes.saldo3}
+          InputProps={{
+            inputComponent: NumberFormatCustom,
+          }}
+        />
+
+        <FormControl variant="filled" className={classes.formControl}>
+          <InputLabel id="demo-simple-select-filled-label">
+            Modo de pagamento
+          </InputLabel>
+          <Select
+            labelId="demo-simple-select-filled-label"
+            id="demo-simple-select-filled"
+            value={modoPgt}
+            onChange={handleChange}
+          >
+            <MenuItem value="dinheiro">Dinheiro</MenuItem>
+            <MenuItem value="cartao">Cartão</MenuItem>
+          </Select>
+        </FormControl>
+
+        <div className="buttonGeral">
+          {/* <button type="button" className="btnLimpar">Limpar</button> */}
+          {/* <button type="button" className="btnSalvar">Salvar</button> */}
+          <Button
+            variant="contained"
+            onClick={clearMan}
+            className={classes.buttonLimpar}
+          >
+            Limpar
+          </Button>
+          <Button
+            type="submit"
+            variant="contained"
+            color="primary"
+            className={classes.buttonSalvar}
+          >
+            Salvar
+          </Button>
+        </div>
+      </form>
     </div>
   );
 };

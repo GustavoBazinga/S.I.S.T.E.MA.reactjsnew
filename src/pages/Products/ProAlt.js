@@ -9,10 +9,47 @@ import "react-notifications-component/dist/theme.css";
 import { store } from "react-notifications-component";
 import "animate.css";
 
-import Sidebar from "../../components/Sidebar/Sidebar.jsx";
+import Sidebar from "../../components/Sidebar/sidebar.jsx";
+
+import TextField from "@material-ui/core/TextField";
+import { makeStyles } from "@material-ui/core/styles";
+import ButtonGroup from "@material-ui/core/ButtonGroup";
+import Button from "@material-ui/core/Button";
+import FormControl from '@material-ui/core/FormControl';
+import Select from "@material-ui/core/Select";
+import MenuItem from "@material-ui/core/MenuItem";
+import InputLabel from "@material-ui/core/InputLabel";
+import PropTypes from 'prop-types';
+
+import NumberFormat from 'react-number-format';
 
 function initialState() {
   return { estoque: "", nome: "", categoria: "", preco: "", nome2: "" };
+}
+
+function NumberFormatCustom(props) {
+  const { inputRef, onChange, ...other } = props;
+
+  return (
+    <NumberFormat
+      {...other}
+      getInputRef={inputRef}
+      onValueChange={(values) => {
+        onChange({
+          target: {
+            name: props.name,
+            value: values.value,
+          },
+        });
+      }}
+      fixedDecimalScale={true}
+      decimalScale={2}
+      thousandSeparator="."
+      decimalSeparator=","
+      isNumericString
+      prefix="R$"
+    />
+  );
 }
 
 const ProAlt = () => {
@@ -81,10 +118,12 @@ const ProAlt = () => {
       ["categoria"]: valueCategoria,
       ["preco"]: valuePreco,
     });
+    setCateg(valueCategoria);
   }
 
   function clearMan() {
     setValues(initialState);
+    setCateg('')
     document.getElementById("nome2AltProduct").disabled = false;
     document.getElementById("nomeAltProduct").disabled = true;
     document.getElementById("categoriaAltProduct").disabled = true;
@@ -190,83 +229,223 @@ const ProAlt = () => {
       [name]: value,
     });
   }
+  NumberFormatCustom.propTypes = {
+    inputRef: PropTypes.func.isRequired,
+    name: PropTypes.string.isRequired,
+    onChange: PropTypes.func.isRequired,
+  };
 
+  const useStyles = makeStyles((theme) => ({
+    root: {
+      marginTop: "10ch",
+
+      "& > *": {
+        width: "80ch",
+        marginLeft: "35ch",
+      },
+      "& div.buttonGeral": {
+        paddingLeft: "40ch",
+        //marginTop: "-5ch",
+      },
+      "& label.Mui-focused": {
+        color: "gray",
+      },
+
+      "& .MuiOutlinedInput-root": {
+        "&.Mui-focused fieldset": {
+          borderColor: "gray",
+        },
+      },
+      "& .MuiFilledInput-underline:after":{
+        borderColor: "gray",
+      },
+    },
+    btnLocalizar: {
+      width: "16.8ch",
+      marginLeft: "1ch",
+      height: '7ch',
+    },
+    buttonSalvar: {
+      "&:hover": {
+        backgroundColor: "green",
+      },
+      backgroundColor: "#707070",
+      width: "18ch",
+      marginLeft: "1ch",
+      marginTop: "2ch",
+    },
+    buttonDeletar: {
+      "&:hover": {
+        backgroundColor: "red",
+      },
+      backgroundColor: "gray",
+      width: "16ch",
+      marginLeft: "1ch",
+      marginTop: "2ch",
+    },
+    buttonLimpar: {
+      backgroundColor: "white",
+      marginTop: "2ch",
+    },
+
+    nome2: {
+      width: "64.7ch",
+    },
+
+    nome: {
+      "&:disabled": {
+        color: "white",
+      },
+      width: "80ch",
+      marginTop: "2ch",
+    },
+
+    estoque: {
+      width: "38ch",
+      marginLeft: "4ch",
+      marginTop: "2ch",
+    },
+    preco: {
+      width: "38ch",
+      marginTop: "2ch",
+    },
+    saldo:{
+      marginTop:'2ch',
+    },
+    formControl:{
+      marginTop:'2ch',
+      
+    }
+    
+  }));
+
+  const [categ, setCateg] = React.useState('');
+
+  const handleChange = (event) => {
+    setCateg(event.target.value);
+    values.categoria= event.target.value
+    if(values.categoria != ""){
+      console.log(values.categoria)
+    }else{
+      console.log("Não leu ainda")
+    }
+    
+  };
+
+  const classes = useStyles();
   return (
     <div>
       <ReactNotification />
-      <Sidebar />
+      <div className="sidebarProAlt">
+        <Sidebar />
+      </div>
+      <div className="titleProAlt">
+        <h1>Alterar Produto</h1>
+      </div>
 
-      <form onSubmit={onSubmit} className="form_altProduct">
-        <div className="inputProductNome2_alt">
-          <input
-            id="nome2AltProduct"
-            type="text"
-            name="nome2"
-            placeholder="Nome do produto para busca"
-            value={values.nome2}
-            onChange={OnChange}
-          />
-        </div>
+      <form onSubmit={onSubmit} className={classes.root}>
+        <TextField
+          id="nome2AltProduct"
+          name="nome2"
+          value={values.nome2}
+          onChange={OnChange}
+          label="Nome do produto para busca"
+          variant="outlined"
+          className={classes.nome2}
+        />
 
-        <div className="inputProductNome_alt">
-          <input
-            disabled
-            id="nomeAltProduct"
-            type="text"
-            name="nome"
-            placeholder="Nome do Produto"
-            value={values.nome}
-            onChange={OnChange}
-          />
-        </div>
-
-        <div className="inputProductCategoria_alt">
-          <input
-            disabled
-            id="categoriaAltProduct"
-            type="text"
-            name="categoria"
-            placeholder="Categoria"
-            value={values.categoria}
-            onChange={OnChange}
-          />
-        </div>
-
-        <div className="inputProductEstoque_alt">
-          <input
-            disabled
-            id="estoqueAltProduct"
-            type="text"
-            name="estoque"
-            placeholder="Estoque"
-            value={values.estoque}
-            onChange={OnChange}
-          />
-        </div>
-
-        <div className="inputProductPreco_alt">
-          <input
-            disabled
-            id="precoAltProduct"
-            type="text"
-            name="preco"
-            placeholder="Preço"
-            value={values.preco}
-            onChange={OnChange}
-          />
-        </div>
-
-        <button type="submit" className="btnAltProduct">
-          Salvar
-        </button>
-
-        <button
-          type="button"
-          onClick={clearMan}
-          className="btnAltProductLimpar"
+        <Button
+          variant="contained"
+          onClick={toFind}
+          className={classes.btnLocalizar}
         >
-          Limpar
-        </button>
+          Localizar
+        </Button>
+
+        
+        <TextField
+          disabled
+          id="nomeAltProduct"
+          name="nome"
+          value={values.nome}
+          onChange={OnChange}
+          label="Nome do Produto"
+          variant="outlined"
+          className={classes.nome}
+          onChange={OnChange}
+        />
+        <TextField
+          variant="outlined"
+          label="Preço"
+          value={values.preco}
+          className={classes.preco}
+          onChange={OnChange}
+          name="preco"
+          id="precoAltProduct"
+          InputProps={{
+            inputComponent: NumberFormatCustom,
+          }}
+        />
+
+
+        <TextField
+          id="estoqueAltProduct"
+          type="number"
+          label="Estoque"
+          name= "estoque"
+          value = {values.estoque}
+          onChange={OnChange}
+          className={classes.estoque}
+          variant="outlined"
+        />
+        <FormControl variant="filled" className={classes.formControl}>
+          
+            <InputLabel id="demo-simple-select-filled-label">Categoria</InputLabel>
+            <Select
+              
+              labelId="demo-simple-select-filled-label"
+              id="categoriaAltProduct"
+              value={categ}
+              onChange={handleChange}
+            >
+              <MenuItem value="Doce">Doce</MenuItem>
+              <MenuItem value="Salgado">Salgado</MenuItem>
+              
+            </Select>
+          </FormControl>
+
+          <div className="buttonGeral">
+          <Button
+            variant="contained"
+            onClick={clearMan}
+            className={classes.buttonLimpar}
+          >
+            Limpar
+          </Button>
+
+          <Button
+            type="button"
+            variant="contained"
+            color="primary"
+            className={classes.buttonDeletar}
+            onClick={onDelete}
+          >
+            Excluir
+          </Button>
+
+          <Button
+            type="submit"
+            variant="contained"
+            color="primary"
+            className={classes.buttonSalvar}
+          >
+            Salvar
+          </Button>
+        </div>
+
+        
+
+        
       </form>
       <form onSubmit={onDelete} className="form_altProduct">
         <button type="submit" className="btnExcProduct">

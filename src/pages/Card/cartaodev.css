@@ -1,8 +1,9 @@
-.sidebarAddSeller{
+.sidebarCardDev{
   position: absolute;
-  top:0;
+  top: 0;
 }
-.titleSellerAdd{
+.titleCardDev{
   margin-top: 4ch;
   text-align: center;
+ 
 }

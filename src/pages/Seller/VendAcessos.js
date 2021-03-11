@@ -3,7 +3,8 @@ import { AgGridReact } from "ag-grid-react";
 import "ag-grid-community/dist/styles/ag-grid.css";
 import "ag-grid-community/dist/styles/ag-theme-balham.css";
 import axios from "axios";
-
+import Sidebar from "../../components/Sidebar/sidebar.jsx";
+import './vendacesso.css'
 class VenAcesso extends React.Component {
   constructor(props) {
     super(props);
@@ -68,19 +69,27 @@ class VenAcesso extends React.Component {
     return (
       <div
         className="ag-theme-balham"
-        style={{
+        
+      >
+        <div className="sidebarSellerAcesso">
+          <Sidebar />
+        </div>
+        <div className="titleSellerAcesso">
+          <h1>Alterar Produto</h1>
+        </div>
+        <button onClick={this.onButtonClick}>PEGA</button>
+        <div style={{
           width: 602,
           height: 300,
-        }}
-      >
-        <h1>CHUPA</h1>
-        <button onClick={this.onButtonClick}>PEGA</button>
-        <AgGridReact
-          columnDefs={this.state.columnDefs}
-          rowData={this.state.rowData}
-          rowSelection="multiple"
-          onGridReady={(params) => (this.gridApi = params.api)}
-        />
+          marginLeft:'50ch',
+        }}> 
+          <AgGridReact
+            columnDefs={this.state.columnDefs}
+            rowData={this.state.rowData}
+            rowSelection="multiple"
+            onGridReady={(params) => (this.gridApi = params.api)}
+          />
+        </div>
       </div>
     );
   }

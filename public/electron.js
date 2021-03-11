@@ -9,7 +9,9 @@ function createWindow() {
     resizable: false,
     width: 1280,
     height: 720,
-  
+    // webPreferences: {
+    //   nodeIntegration: true
+    // }
   });
   mainWindow.loadURL(
     isDev

@@ -9,12 +9,44 @@ import ReactNotification from "react-notifications-component";
 import "react-notifications-component/dist/theme.css";
 import { store } from "react-notifications-component";
 import "animate.css";
+import TextField from "@material-ui/core/TextField";
+import { makeStyles } from "@material-ui/core/styles";
+import ButtonGroup from "@material-ui/core/ButtonGroup";
+import Button from "@material-ui/core/Button";
+import Sidebar from "../../components/Sidebar/sidebar.jsx";
+import PropTypes from 'prop-types';
 
-import Sidebar from "../../components/Sidebar/Sidebar.jsx";
+import NumberFormat from 'react-number-format';
 
 function initialState() {
   return { matricula: "", nome: "", email: "", saldo: "", matricula2: "" };
 }
+
+function NumberFormatCustom(props) {
+  const { inputRef, onChange, ...other } = props;
+
+  return (
+    <NumberFormat
+      {...other}
+      getInputRef={inputRef}
+      onValueChange={(values) => {
+        onChange({
+          target: {
+            name: props.name,
+            value: values.value,
+          },
+        });
+      }}
+      fixedDecimalScale={true}
+      decimalScale={2}
+      thousandSeparator="."
+      decimalSeparator=","
+      isNumericString
+      prefix="R$"
+    />
+  );
+}
+
 
 const CartaoAlt = () => {
   const [values, setValues] = useState(initialState);
@@ -78,7 +110,7 @@ const CartaoAlt = () => {
     setValues({
       ...values,
       ["nome"]: valueNome,
-      ["matricula"]: valueEmail,
+      ["matricula"]: valueMatricula,
       ["email"]: valueEmail,
       ["saldo"]: valueSaldo / 100,
     });
@@ -192,89 +224,195 @@ const CartaoAlt = () => {
     });
   }
 
+  NumberFormatCustom.propTypes = {
+    inputRef: PropTypes.func.isRequired,
+    name: PropTypes.string.isRequired,
+    onChange: PropTypes.func.isRequired,
+  };
+
+  const useStyles = makeStyles((theme) => ({
+    root: {
+      marginTop: "10ch",
+
+      "& > *": {
+        width: "80ch",
+        marginLeft: "35ch",
+      },
+      "& div.buttonGeral": {
+        paddingLeft: "40ch",
+        //marginTop: "-5ch",
+      },
+      "& label.Mui-focused": {
+        color: "gray",
+      },
+
+      "& .MuiOutlinedInput-root": {
+        "&.Mui-focused fieldset": {
+          borderColor: "gray",
+        },
+      },
+    },
+    btnLocalizar: {
+      width: "16.8ch",
+      marginLeft: "1ch",
+      height: '7ch',
+    },
+    buttonSalvar: {
+      "&:hover": {
+        backgroundColor: "green",
+      },
+      backgroundColor: "#707070",
+      width: "18ch",
+      marginLeft: "1ch",
+      marginTop: "2ch",
+    },
+    buttonDeletar: {
+      "&:hover": {
+        backgroundColor: "red",
+      },
+      backgroundColor: "gray",
+      width: "16ch",
+      marginLeft: "1ch",
+      marginTop: "2ch",
+    },
+    buttonLimpar: {
+      backgroundColor: "white",
+      marginTop: "2ch",
+    },
+
+    matricula2: {
+      width: "64.7ch",
+    },
+
+    nome: {
+      "&:disabled": {
+        color: "white",
+      },
+      width: "80ch",
+      marginTop: "2ch",
+    },
+
+    matricula: {
+      width: "38ch",
+      marginLeft: "4ch",
+      marginTop: "2ch",
+    },
+    email: {
+      width: "38ch",
+      marginTop: "2ch",
+    },
+    saldo:{
+      marginTop:'2ch',
+    },
+    
+  }));
+
+  
+
+  const classes = useStyles();
   return (
     <div>
       <ReactNotification />
-      <Sidebar />
+      <div className="sidebarCardAlt">
+        <Sidebar />
+      </div>
+      <div className="titleCardAlt">
+        <h1>Alterar Cartão</h1>
+      </div>
+      <form onSubmit={onSubmit} className={classes.root}>
+        <TextField
+          id="matricula2AltCartao"
+          name="matricula2"
+          value={values.matricula2}
+          onChange={OnChange}
+          label="Matricula de Busca"
+          variant="outlined"
+          className={classes.matricula2}
+        />
 
-      <form onSubmit={onSubmit} className="form_altCartao">
-        <div className="inputCartaoMatricula2_alt">
-          <input
-            id="matricula2AltCartao"
-            type="text"
-            name="matricula2"
-            placeholder="Matricula de Busca"
-            value={values.matricula2}
-            onChange={OnChange}
-          />
-        </div>
-
-        <div className="inputCartaoNome_alt">
-          <input
-            disabled
-            id="nomeAltCartao"
-            type="text"
-            name="nome"
-            placeholder="Nome Completo"
-            value={values.nome}
-            onChange={OnChange}
-          />
-        </div>
-
-        <div className="inputCartaoEmail_alt">
-          <input
-            disabled
-            id="emailAltCartao"
-            type="text"
-            name="email"
-            placeholder="E-mail"
-            value={values.email}
-            onChange={OnChange}
-          />
-        </div>
-
-        <div className="inputCartaoMatricula_alt">
-          <input
-            disabled
-            id="matriculaAltCartao"
-            type="text"
-            name="matricula"
-            placeholder="Matricula"
-            value={values.matricula}
-            onChange={OnChange}
-          />
-        </div>
-
-        <div className="inputCartaoSaldo_alt">
-          <CurrencyInput
-            prefix="R$ "
-            decimalSeparator=","
-            thousandSeparator="."
-            placeholder="Saldo"
-            name="saldo"
-            id="saldoAltCartao"
-            value={values.saldo}
-            onChangeEvent={OnChange}
-          />
-        </div>
-
-        <button type="submit" className="btnAltCartao">
-          Salvar
-        </button>
-
-        <button type="button" onClick={clearMan} className="btnAltCartaoLimpar">
-          Limpar
-        </button>
-      </form>
-      <form onSubmit={onDelete} className="form_altCartao">
-        <button type="submit" className="btnExcCartao">
-          Excluir
-        </button>
-      </form>
-      <form onSubmit={toFind} className="form_altCartao">
-        <button type="submit" className="btnFindCartao">
+        <Button
+          variant="contained"
+          onClick={toFind}
+          className={classes.btnLocalizar}
+        >
           Localizar
-        </button>
+        </Button>
+        <TextField
+          disabled
+          id="nomeAltCartao"
+          name="nome"
+          value={values.nome}
+          onChange={OnChange}
+          label="Nome Completo"
+          variant="outlined"
+          className={classes.nome}
+          onChange={OnChange}
+        />
+        <TextField
+          disabled
+          id="emailAltCartao"
+          label="E-mail"
+          name="email"
+          value={values.email}
+          onChange={OnChange}
+          className={classes.email}
+          variant="outlined"
+          onChange={OnChange}
+        />
+        <TextField
+          disabled
+          id="matriculaAltCartao"
+          name="matricula"
+          value={values.matricula}
+          onChange={OnChange}
+          label="Matricula"
+          variant="outlined"
+          className={classes.matricula}
+          onChange={OnChange}
+        />
+        <TextField
+          disabled
+          variant="outlined"
+          label="Saldo"
+          value={values.saldo}
+          onChange={OnChange}
+          name="saldo"
+          id="saldoAltCartao"
+          className={classes.saldo}
+          InputProps={{
+            inputComponent: NumberFormatCustom,
+          }}
+        />
+        
+
+        <div className="buttonGeral">
+          <Button
+            variant="contained"
+            onClick={clearMan}
+            className={classes.buttonLimpar}
+          >
+            Limpar
+          </Button>
+
+          <Button
+            type="button"
+            variant="contained"
+            color="primary"
+            className={classes.buttonDeletar}
+            onClick={onDelete}
+          >
+            Excluir
+          </Button>
+
+          <Button
+            type="submit"
+            variant="contained"
+            color="primary"
+            className={classes.buttonSalvar}
+          >
+            Salvar
+          </Button>
+        </div>
       </form>
     </div>
   );

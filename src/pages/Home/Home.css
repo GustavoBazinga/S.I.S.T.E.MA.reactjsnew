@@ -1,12 +1,9 @@
-.teste{
-  align-items: center;
-  justify-content: center;
-  flex: 1;
-  color: red;
+.sidebarHome{
+  position: absolute;
+  top:0;
 }
 
 .logocinza{
-  display: flex;
   
   margin-left:30%;
   bottom: 0;

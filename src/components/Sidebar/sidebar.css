@@ -6,23 +6,3 @@
   position: absolute;
 
 }
-#Layout .logo{
-  position: absolute;
-  margin-left:20%;
-  
-  bottom: 0;
-}
-
-#Layout .logocinza{
-  position: absolute;
-  
-  top:10%;
-  left:35%;
-}
-
-.footerSideBar{
-  align-items: flex-end;
-  justify-content: center;
-  flex: 1;
-  display: flex;  
-}

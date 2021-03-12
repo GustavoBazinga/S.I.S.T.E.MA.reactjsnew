@@ -174,7 +174,7 @@ const UserLogin = () => {
   return (
       <div className="page-login">
         <div className="logo">
-          <img src={logoAnimated} width="500px" alt="" />
+          <img src={logoAnimated} width="400px" alt="" />
         </div>
         <div className="coluna">
           <h1>S.I.S.T.E.MA</h1>

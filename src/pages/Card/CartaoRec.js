@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./cartaorec.css";
 
 import CurrencyInput from "react-currency-input";
@@ -23,16 +23,17 @@ import Button from "@material-ui/core/Button";
 import PropTypes from "prop-types";
 
 import NumberFormat from "react-number-format";
+import { FaPlusSquare } from "react-icons/fa";
 
 function initialState() {
   return {
     matricula: "",
     nome: "",
     email: "",
-    saldo: "",
+    saldo: null,
     matricula2: "",
-    saldo2: "",
-    saldo3: "",
+    saldo2: 0,
+    saldo3: null,
     modo: "",
   };
 }
@@ -67,6 +68,10 @@ const CartaoRec = () => {
   const [values, setValues] = useState(initialState);
   const [modoPgt, setModoPgt] = React.useState("");
 
+  useEffect(() => {
+    document.getElementById("saldo2RecCartao").disabled = true;
+  }, []);
+
   var atual = values.saldo;
 
   function toFind(event) {
@@ -81,6 +86,7 @@ const CartaoRec = () => {
           document.getElementById("matricula2RecCartao").disabled = true;
           document.getElementById("nomeRecCartao").disabled = false;
           document.getElementById("emailRecCartao").disabled = false;
+          document.getElementById("saldo2RecCartao").disabled = false;
           OnFound({
             valueNome: response.data.nome,
             valueMatricula: response.data.matricula,
@@ -106,7 +112,7 @@ const CartaoRec = () => {
         });
     } else {
       store.addNotification({
-        title: "Não foi possível localizar o caartão!",
+        title: "Não foi possível localizar o cartão!",
         message:
           "O campo de busca está vazio. Digite o matrícula do cartão desejado e tente novamente.",
         type: "warning",
@@ -134,8 +140,14 @@ const CartaoRec = () => {
   }
 
   function clearMan() {
-    setValues(initialState);
     somaRecarga = 0;
+    setValues(initialState);
+    setModoPgt('')
+    
+    document.getElementById("demo-simple-select-filled").displayEmpty = true
+    
+    document.getElementById("saldo2RecCartao").disabled = true;
+    document.getElementById("matricula2RecCartao").disabled = false;
     // document.getElementById("matricula2AltCartao").disabled = false;
     // document.getElementById("nomeAltCartao").disabled = true;
     // document.getElementById("emailAltCartao").disabled = true;
@@ -144,45 +156,92 @@ const CartaoRec = () => {
   }
 
   async function criaRecarga() {
-    await axios
-      .post("https://sistemaifrj.herokuapp.com/recargas/" + values.matricula2, {
+    await axios.post(
+      "https://sistemaifrj.herokuapp.com/recargas/" + values.matricula2,
+      {
         modo_pagto: values.modo,
         valor_recarga: values.saldo2 * 100,
-      })
-      .then((response) => {
-        console.log("POST Response:");
-        console.log(response);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+      }
+    );
   }
 
   async function atualizaSaldo() {
-    await axios
-      .put("https://sistemaifrj.herokuapp.com/recargas/" + values.matricula2, {
+    await axios.put(
+      "https://sistemaifrj.herokuapp.com/recargas/" + values.matricula2,
+      {
         saldo: values.saldo3 * 100,
-      })
-      .then((response) => {
-        console.log("PUT Response:");
-        console.log(response);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+      }
+    );
   }
 
   async function onSubmit(event) {
     event.preventDefault();
-    console.log(values.saldo * 100);
-    console.log(values.saldo2 * 100);
-    console.log(values.saldo3 * 100);
-    console.log(modoPgt)
-    console.log(values.modo)
-    criaRecarga();
-    atualizaSaldo();
-
-    
+    if (document.getElementById("matricula2RecCartao").disabled) {
+      if (values.saldo != values.saldo3) {
+        if (values.modo != "") {
+          criaRecarga();
+          atualizaSaldo();
+          store.addNotification({
+            title: "Recarga realizada!",
+            message: "A recarga foi concluída com sucesso!",
+            type: "success",
+            container: "top-right",
+            insert: "top",
+            animationIn: ["animate__animated", "animate__fadeIn"],
+            animationOut: ["animate__animated", "animate__fadeOut"],
+            dismiss: {
+              duration: 3000,
+              showIcon: true,
+            },
+          });
+          clearMan()
+        } else {
+          store.addNotification({
+            title: "Modo de pagamento em branco!",
+            message: "Selecione um modo de pagamento e tente novamente.",
+            type: "warning",
+            container: "top-right",
+            insert: "top",
+            animationIn: ["animate__animated", "animate__flash"],
+            animationOut: ["animate__animated", "animate__fadeOut"],
+            dismiss: {
+              duration: 3000,
+              showIcon: true,
+            },
+          });
+        }
+      } else {
+        store.addNotification({
+          title: "Recarga inválida!",
+          message:
+            "Nenhum valor foi adicionado a essa recarga. Tente novamente.",
+          type: "warning",
+          container: "top-right",
+          insert: "top",
+          animationIn: ["animate__animated", "animate__flash"],
+          animationOut: ["animate__animated", "animate__fadeOut"],
+          dismiss: {
+            duration: 3000,
+            showIcon: true,
+          },
+        });
+      }
+    } else {
+      store.addNotification({
+        title: "Recarga bloqueada!",
+        message:
+          "É preciso localizar um vendedor antes de tentar recarregar. Tente novamente.",
+        type: "danger",
+        container: "top-right",
+        insert: "top",
+        animationIn: ["animate__animated", "animate__flash"],
+        animationOut: ["animate__animated", "animate__fadeOut"],
+        dismiss: {
+          duration: 3000,
+          showIcon: true,
+        },
+      });
+    }
   }
 
   async function OnChange(event) {
@@ -207,13 +266,15 @@ const CartaoRec = () => {
   }
 
   async function somaValor(valor, jump) {
-    if (!jump) somaRecarga = somaRecarga + valor;
-    else somaRecarga = valor;
-    await setValues({
-      ...values,
-      ["saldo2"]: somaRecarga,
-      ["saldo3"]: values.saldo + somaRecarga,
-    });
+    if (document.getElementById("matricula2RecCartao").disabled) {
+      if (!jump) somaRecarga = somaRecarga + valor;
+      else somaRecarga = valor;
+      await setValues({
+        ...values,
+        ["saldo2"]: somaRecarga,
+        ["saldo3"]: values.saldo + somaRecarga,
+      });
+    }
   }
 
   NumberFormatCustom.propTypes = {
@@ -330,7 +391,6 @@ const CartaoRec = () => {
     },
   }));
 
-
   const handleChange = (event) => {
     setModoPgt(event.target.value);
     values.modo = event.target.value;
@@ -346,7 +406,6 @@ const CartaoRec = () => {
       <div className="titleCardRec">
         <h1>Recarregar Cartão</h1>
       </div>
-
       <form onSubmit={onSubmit} className={classes.root}>
         <TextField
           id="matricula2RecCartao"
@@ -394,7 +453,7 @@ const CartaoRec = () => {
           aria-label="outlined secondary button group"
         >
           <Button
-            name="R5"
+            id="R5"
             onClick={() => {
               somaValor(5, false);
             }}
@@ -403,7 +462,7 @@ const CartaoRec = () => {
             R$5
           </Button>
           <Button
-            name="R10"
+            id="R10"
             onClick={() => {
               somaValor(10, false);
             }}
@@ -412,7 +471,7 @@ const CartaoRec = () => {
             R$10
           </Button>
           <Button
-            name="R20"
+            id="R20"
             onClick={() => {
               somaValor(20, false);
             }}
@@ -421,7 +480,7 @@ const CartaoRec = () => {
             R$20
           </Button>
           <Button
-            name="R50"
+            id="R50"
             onClick={() => {
               somaValor(50, false);
             }}
@@ -430,7 +489,7 @@ const CartaoRec = () => {
             R$50
           </Button>
           <Button
-            name="R100"
+            id="R100"
             onClick={() => {
               somaValor(100, false);
             }}
@@ -512,7 +571,7 @@ const CartaoRec = () => {
             color="primary"
             className={classes.buttonSalvar}
           >
-            Salvar
+            Recarregar
           </Button>
         </div>
       </form>

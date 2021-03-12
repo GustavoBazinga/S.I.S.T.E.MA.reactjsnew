@@ -21,6 +21,7 @@ import VenAlt from '../../pages/Seller/VendAlt.js'
 import VenAcessos from '../../pages/Seller/VendAcessos.js'
 import DepAdd from '../../pages/Dep/DepAdd.js'
 import DepAlt from '../../pages/Dep/DepAlt.js'
+import Relatorio from '../../pages/Report/relatorio.js'
 
 
 
@@ -43,6 +44,7 @@ const PagesRoot = () => (
         <RoutesPrivate path="/vendedor/acessos" component={VenAcessos}/>
         <RoutesPrivate path="/departamento/add" component={DepAdd}/>
         <RoutesPrivate path="/departamento/alt" component={DepAlt}/>
+        <RoutesPrivate path="/rep" component={Relatorio}/>
         <RoutesPrivate path="/" component={Home} />
       </Switch>
     </StoreProvider>

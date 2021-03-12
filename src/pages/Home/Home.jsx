@@ -1,7 +1,7 @@
 import React from 'react';
 import './Home.css';
 import Sidebar from "../../components/Sidebar/sidebar.jsx";
-import logoFundo from '../../images/logotestecinza.svg';
+import logoFundo from '../../images/LogoGIF.gif';
 
 const PagesHome = () => {
   return (
@@ -11,7 +11,7 @@ const PagesHome = () => {
     </div>
    
     <div className="logocinza">
-           <img src={logoFundo} width="500px"  alt=""/>
+           <img src={logoFundo} width="300px"  alt=""/>
     </div>
 
     </div>

@@ -1,0 +1,11 @@
+.sidebarRel{
+    position: absolute;
+    top:0;
+  }
+  .titleRel{
+    margin-top: 4ch;
+    text-align: center;
+  }
+  .buttonRel{
+    margin-left: 80ch;
+  }

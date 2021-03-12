@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./cartaodev.css";
 
 import CurrencyInput from "react-currency-input";
@@ -24,6 +24,7 @@ import PropTypes from "prop-types";
 
 import NumberFormat from "react-number-format";
 import { FaLastfmSquare } from "react-icons/fa";
+import { SignalCellularNull } from "@material-ui/icons";
 
 function initialState() {
   return {
@@ -62,6 +63,7 @@ function NumberFormatCustom(props) {
 const CartaoDev = () => {
   const [values, setValues] = useState(initialState);
   var atual = values.saldo;
+
 
   function toFind(event) {
     event.preventDefault();
@@ -120,13 +122,13 @@ const CartaoDev = () => {
   }
 
   async function clearMan() {
-    setValues(initialState);
-    
     document.getElementById("matricula2DevCartao").disabled = false;
     document.getElementById("devSolicitadoCartao").disabled = true;
+    await setValues(initialState);
+    // window.location.reload()
   }
 
-  async function onSubmit(event) {
+  async function OnSubmit(event) {
     event.preventDefault();
     var saldoTotal;
     await axios
@@ -164,7 +166,7 @@ const CartaoDev = () => {
       .catch((error) => {
         console.log(error);
       });
-      window.location.reload();
+    window.location.reload();
 
     //   axios
     //     .put("https://sistemaifrj.herokuapp.com/recargas/" + values.matricula2, {
@@ -238,7 +240,6 @@ const CartaoDev = () => {
         ["devSolicitado"]: valorSolicitado / 100,
       });
     }
-   
   }
 
   function Exibir(event) {
@@ -368,7 +369,7 @@ const CartaoDev = () => {
         <h1>Devolução</h1>
       </div>
 
-      <form onSubmit={onSubmit} className={classes.root}>
+      <form onSubmit={OnSubmit} className={classes.root}>
         <TextField
           id="matricula2DevCartao"
           name="matricula2"

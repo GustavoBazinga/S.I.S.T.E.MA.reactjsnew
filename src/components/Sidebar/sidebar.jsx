@@ -134,7 +134,7 @@ function Sidebar() {
               </SubMenu>
               <MenuItem icon={<HiOutlineDocumentReport size="25px" />}>
                 Relatório
-                <Link to="/rel" />
+                <Link to="/rep" />
               </MenuItem>
 
               <SidebarFooter className="footerSideBar">

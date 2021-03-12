@@ -148,7 +148,7 @@ const VenAlt = () => {
               console.log(response);
               store.addNotification({
                 title: "Cadastro atualizado",
-                message: "Adminstrador atualizado com sucesso!",
+                message: "Vendedor atualizado com sucesso!",
                 type: "success",
                 container: "top-right",
                 insert: "top",
@@ -412,9 +412,6 @@ const VenAlt = () => {
           variant="outlined"
           onChange={OnChange}
         />
-
-        
-
         <div className="buttonGeral">
           <Button
             variant="contained"

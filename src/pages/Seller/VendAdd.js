@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 //FAZER CSS VENDEDORADD
 
@@ -20,12 +20,31 @@ import ButtonGroup from "@material-ui/core/ButtonGroup";
 import Button from "@material-ui/core/Button";
 import Popper from '@material-ui/core/Popper';
 import Switch from '@material-ui/core/Switch';
-
+import FormControl from '@material-ui/core/FormControl';
+import Select from "@material-ui/core/Select";
+import MenuItem from "@material-ui/core/MenuItem";
+import InputLabel from "@material-ui/core/InputLabel";
 function initialState() {
-  return { matricula: "", nome: "", email: "", crpsenha: "", crpsenhax: "" };
+  return {adminnames:"", matricula: "", nome: "", email: "", crpsenha: "", crpsenhax: "" };
 }
 
+
 const VenAdd = () => {
+  const [admins, setAdmins] = useState([]);
+  useEffect(() => {
+    const getAllAdmins = async () => {
+      try {
+        const response = await axios.get("https://sistemaifrj.herokuapp.com/departamento/");
+        setAdmins(response.data);
+        console.log(response.data);
+      } catch (err) {
+        console.log("error");
+      }
+    };
+    getAllAdmins();
+  }, []);
+  
+
   const [values, setValues] = useState(initialState);
   function clearMan() {
     setValues(initialState);
@@ -198,6 +217,13 @@ const VenAdd = () => {
 
   const classes = useStyles();
 
+
+  const [categ, setCateg] = React.useState('');
+
+  const handleChange = (event) => {
+    setCateg(event.target.value); 
+  };
+
   return (
     <div>
       <ReactNotification />
@@ -261,11 +287,27 @@ const VenAdd = () => {
           className={classes.senhaConfirmar}
           variant="outlined"
         />
+        <FormControl variant="filled" className={classes.formControl} >
+            <InputLabel id="demo-simple-select-filled-label">Departamento</InputLabel>
+            <Select
+              labelId="demo-simple-select-filled-label"
+              id="demo-simple-select-filled"
+              value={categ}
+              onChange={handleChange}
+            >
+              {admins.map(result=> 
+            <MenuItem className="option" value={result.nome}>{result.nome}</MenuItem>
+              )}
+            
+            </Select>
+          </FormControl>
         <label className={classes.acesso} >Acesso</label>
         
         <Switch className={classes.interruptor} color="primary"inputProps={{ 'aria-label': 'primary checkbox' }} />
 
         <div className="buttonGeral">
+          {/* <button type="button" className="btnLimpar">Limpar</button> */}
+          {/* <button type="button" className="btnSalvar">Salvar</button> */}
           <Button variant="contained" onClick={clearMan} className={classes.buttonLimpar}>
             Limpar
           </Button>

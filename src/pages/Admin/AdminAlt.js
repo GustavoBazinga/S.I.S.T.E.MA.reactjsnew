@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 
 import "./adminalt.css";
 
@@ -13,7 +13,12 @@ import TextField from "@material-ui/core/TextField";
 import { makeStyles } from "@material-ui/core/styles";
 import ButtonGroup from "@material-ui/core/ButtonGroup";
 import Button from "@material-ui/core/Button";
+
+import Autocomplete from "@material-ui/lab/Autocomplete";
+
 import "animate.css";
+import { ContactlessTwoTone } from "@material-ui/icons";
+import CircularProgress from "@material-ui/core/CircularProgress";
 
 function initialState() {
   return {
@@ -27,71 +32,70 @@ function initialState() {
 }
 
 const AdminAlt = () => {
-  const [values, setValues] = useState(initialState);
-
+  const [admins, setAdmins] = useState([]);
+  const [once, setOnce] = useState(false);
+  const [cbreset, setcbreset] = useState([]);
   useEffect(() => {
-    document.getElementById("login2AltAdm").disabled = false;
+    const getAllAdmins = async () => {
+      try {
+        const response = await axios.get(
+          "https://sistemaifrj.herokuapp.com/admins/"
+        );
+        setAdmins(response.data);
+        console.log(response.data);
+      } catch (err) {
+        console.log("error");
+      }
+    };
+    getAllAdmins();
+
     document.getElementById("nomeAltAdm").disabled = true;
     document.getElementById("emailAltAdm").disabled = true;
     document.getElementById("loginAltAdm").disabled = true;
     document.getElementById("passwordAltAdm").disabled = true;
     document.getElementById("passwordConfirmedAltAdm").disabled = true;
- 
-}, [])
+  }, []);
 
-  function toFind(event) {
-    event.preventDefault();
+  const optionsAdm = [];
 
-    console.log(values);
-    if (values.login2 !== "") {
-      axios
-        .get("https://sistemaifrj.herokuapp.com/admins/f/" + values.login2)
-        .then((response) => {
-          console.log(response);
-          document.getElementById("login2AltAdm").disabled = true;
-          document.getElementById("nomeAltAdm").disabled = false;
-          document.getElementById("emailAltAdm").disabled = false;
-          document.getElementById("loginAltAdm").disabled = false;
-          document.getElementById("passwordAltAdm").disabled = false;
-          document.getElementById("passwordConfirmedAltAdm").disabled = false;
-          OnFound({
-            valueNome: response.data.nome,
-            valueLogin: response.data.login,
-            valueEmail: response.data.email,
-          });
-          store.addNotification({
-            title: "Localizado!",
-            message: "Administrador localizado e dados exibidos!",
-            type: "default",
-            container: "top-right",
-            insert: "top",
-            animationIn: ["animate__animated", "animate__fadeIn"],
-            animationOut: ["animate__animated", "animate__fadeOut"],
-            dismiss: {
-              duration: 3000,
-              showIcon: true,
-            },
-          });
-        })
-        .catch((error) => {
-          console.log(error);
+  admins.map((result) => {
+    optionsAdm.push(result.login);
+  });
+
+  const [values, setValues] = useState(initialState);
+
+  function toFind(valor) {
+    axios
+      .get("https://sistemaifrj.herokuapp.com/admins/f/" + valor)
+      .then((response) => {
+        console.log(response);
+        document.getElementById("nomeAltAdm").disabled = false;
+        document.getElementById("emailAltAdm").disabled = false;
+        document.getElementById("loginAltAdm").disabled = false;
+        document.getElementById("passwordAltAdm").disabled = false;
+        document.getElementById("passwordConfirmedAltAdm").disabled = false;
+        OnFound({
+          valueNome: response.data.nome,
+          valueLogin: response.data.login,
+          valueEmail: response.data.email,
         });
-    } else {
-      store.addNotification({
-        title: "Não foi possível localizar o adminstrador!",
-        message:
-          "O campo de busca está vazio. Digite o Login do Administrador desejado e tente novamente.",
-        type: "warning",
-        container: "top-right",
-        insert: "top",
-        animationIn: ["animate__animated", "animate__fadeIn"],
-        animationOut: ["animate__animated", "animate__fadeOut"],
-        dismiss: {
-          duration: 3000,
-          showIcon: true,
-        },
+        store.addNotification({
+          title: "Localizado!",
+          message: "Administrador localizado e dados exibidos!",
+          type: "default",
+          container: "top-right",
+          insert: "top",
+          animationIn: ["animate__animated", "animate__fadeIn"],
+          animationOut: ["animate__animated", "animate__fadeOut"],
+          dismiss: {
+            duration: 3000,
+            showIcon: true,
+          },
+        });
+      })
+      .catch((error) => {
+        console.log(error);
       });
-    }
   }
 
   function OnFound({ valueNome, valueLogin, valueEmail }) {
@@ -105,7 +109,7 @@ const AdminAlt = () => {
 
   function clearMan() {
     setValues(initialState);
-    document.getElementById("login2AltAdm").disabled = false;
+    setValue(null);
     document.getElementById("nomeAltAdm").disabled = true;
     document.getElementById("emailAltAdm").disabled = true;
     document.getElementById("loginAltAdm").disabled = true;
@@ -115,7 +119,7 @@ const AdminAlt = () => {
 
   function onSubmit(event) {
     event.preventDefault();
-    if (document.getElementById("login2AltAdm").disabled) {
+    if (!document.getElementById("nomeAltAdm").disabled) {
       if (
         values.nome !== "" &&
         values.login !== "" &&
@@ -139,7 +143,7 @@ const AdminAlt = () => {
           });
         } else {
           axios
-            .put("https://sistemaifrj.herokuapp.com/admins/" + values.login2, {
+            .put("https://sistemaifrj.herokuapp.com/admins/" + document.getElementById("login2AltAdm").value, {
               nome: values.nome,
               login: values.login,
               email: values.email,
@@ -147,6 +151,17 @@ const AdminAlt = () => {
             })
             .then((response) => {
               console.log(response);
+              axios
+                .get("https://sistemaifrj.herokuapp.com/admins")
+                .then(async (response) => {
+                  optionsAdm.length = 0;
+                  response.data.map((result) => {
+                    optionsAdm.push(result.login);
+                  });
+                  console.log(optionsAdm);
+                  await setOnce(true);
+                  setcbreset(optionsAdm);
+                });
               store.addNotification({
                 title: "Cadastro atualizado",
                 message: "Adminstrador atualizado com sucesso!",
@@ -201,13 +216,26 @@ const AdminAlt = () => {
 
   async function onDelete(event) {
     event.preventDefault();
-    console.log("ASDASDASD");
-    console.log(document.getElementById("login2AltAdm").disabled);
-    if (document.getElementById("login2AltAdm").disabled) {
+    if (!document.getElementById("nomeAltAdm").disabled) {
+      console.log(values);
       axios
-        .delete("https://sistemaifrj.herokuapp.com/admins/l/" + values.login2)
+        .delete(
+          "https://sistemaifrj.herokuapp.com/admins/l/" +
+            document.getElementById("login2AltAdm").value
+        )
         .then((response) => {
           console.log(response);
+          axios
+            .get("https://sistemaifrj.herokuapp.com/admins")
+            .then(async (response) => {
+              optionsAdm.length = 0;
+              response.data.map((result) => {
+                optionsAdm.push(result.login);
+              });
+              console.log(optionsAdm);
+              await setOnce(true);
+              setcbreset(optionsAdm);
+            });
           store.addNotification({
             title: "Exclusão realizada",
             message: "Adminstrador excluído com sucesso!",
@@ -253,6 +281,14 @@ const AdminAlt = () => {
       [name]: value,
     });
   }
+
+  function OnChange2(valueLogin) {
+    setValues({
+      ...values,
+      ["login2"]: valueLogin,
+    });
+  }
+
   const useStyles = makeStyles((theme) => ({
     root: {
       marginTop: "10ch",
@@ -277,8 +313,8 @@ const AdminAlt = () => {
     },
     btnLocalizar: {
       width: "16.8ch",
-      marginLeft: "1ch",
-
+      marginLeft: "118.2ch",
+      marginBottom: "-9.4ch",
       height: "7ch",
     },
     buttonSalvar: {
@@ -305,7 +341,8 @@ const AdminAlt = () => {
     },
 
     login2: {
-      width: "64.7ch",
+      width: "80ch",
+      // height:"7ch",
     },
 
     nome: {
@@ -336,11 +373,11 @@ const AdminAlt = () => {
     },
   }));
   const classes = useStyles();
+
+  const [value, setValue] = React.useState("");
+
   return (
     <div>
-      <script type="text/javascript">;
-      onLoaded()
-      </script>
       <ReactNotification />
       <div className="sidebarAdmAlt">
         <Sidebar />
@@ -348,23 +385,58 @@ const AdminAlt = () => {
       <div className="titleAdmAlt">
         <h1>Alterar Adminstrador</h1>
       </div>
+
       <form onSubmit={onSubmit} className={classes.root}>
-        <TextField
-          id="login2AltAdm"
-          name="login2"
-          value={values.login2}
-          onChange={OnChange}
-          label="Login de Busca"
-          variant="outlined"
-          className={classes.login2}
-        />
-        <Button
-          variant="contained"
-          onClick={toFind}
-          className={classes.btnLocalizar}
-        >
-          Localizar
-        </Button>
+        {once == false && (
+          <Autocomplete
+            className={classes.login2}
+            id="login2AltAdm"
+            value={value}
+            onChange={async (event, newValue) => {
+              await setValue(newValue);
+              await OnChange2(newValue);
+              if (newValue == null) {
+                clearMan();
+              } else {
+                toFind(newValue);
+              }
+            }}
+            options={optionsAdm}
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                label="Login de Busca"
+                variant="outlined"
+              />
+            )}
+          />
+        )}
+
+        {once == true && (
+          <Autocomplete
+            className={classes.login2}
+            id="login2AltAdm"
+            value={value}
+            onChange={async (event, newValue) => {
+              await setValue(newValue);
+              await OnChange2(newValue);
+              if (newValue == null) {
+                clearMan();
+              } else {
+                toFind(newValue);
+              }
+            }}
+            options={cbreset}
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                label="Login de Busca"
+                variant="outlined"
+              />
+            )}
+          />
+        )}
+
         <TextField
           id="nomeAltAdm"
           name="nome"

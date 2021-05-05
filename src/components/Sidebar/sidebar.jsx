@@ -125,12 +125,12 @@ function Sidebar() {
                   Alterar
                   <Link to="/vendedor/alt" />
                 </MenuItem>
-                <SubMenu title="Acessos">
+                
                   <MenuItem>
                     Todos Acessos
                     <Link to="/vendedor/acessos" />
                   </MenuItem>
-                </SubMenu>
+
               </SubMenu>
               <MenuItem icon={<HiOutlineDocumentReport size="25px" />}>
                 Relatório

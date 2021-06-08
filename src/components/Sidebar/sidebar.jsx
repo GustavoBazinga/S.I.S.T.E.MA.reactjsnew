@@ -23,6 +23,8 @@ import {
   AiOutlineUser,
 } from "react-icons/ai";
 
+import { SiCashapp } from "react-icons/si"
+
 import { FiCreditCard } from "react-icons/fi";
 
 import { HiOutlineDocumentReport } from "react-icons/hi";

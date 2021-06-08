@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
+import StoreContext from "components/Store/Context";
 import "./cartaorec.css";
 
 import CurrencyInput from "react-currency-input";
@@ -25,19 +26,20 @@ import PropTypes from "prop-types";
 import NumberFormat from "react-number-format";
 import { FaPlusSquare } from "react-icons/fa";
 
-function initialState() {
+function initialState(idAdmin) {
   return {
     matricula: "",
     nome: "",
     email: "",
-    saldo: null,
+    saldo: 0,
     matricula2: "",
+    id_admin: idAdmin,
     saldo2: 0,
-    saldo3: null,
+    saldo3: 0,
     modo: "",
   };
 }
-var somaRecarga = 0;
+var somaRecarga = 0
 
 function NumberFormatCustom(props) {
   const { inputRef, onChange, ...other } = props;
@@ -65,6 +67,8 @@ function NumberFormatCustom(props) {
 }
 
 const CartaoRec = () => {
+ 
+  
   const [values, setValues] = useState(initialState);
   const [modoPgt, setModoPgt] = React.useState("");
 
@@ -76,7 +80,8 @@ const CartaoRec = () => {
 
   function toFind(event) {
     event.preventDefault();
-
+    console.log(idC)
+    console.log(loginC)
     console.log(values);
     if (values.matricula2 !== "") {
       axios
@@ -141,7 +146,7 @@ const CartaoRec = () => {
 
   function clearMan() {
     somaRecarga = 0;
-    setValues(initialState);
+    setValues(initialState(idC));
     setModoPgt('')
     
     document.getElementById("demo-simple-select-filled").displayEmpty = true
@@ -155,14 +160,22 @@ const CartaoRec = () => {
     // document.getElementById("saldoAltCartao").disabled = true;
   }
 
+  const {idC, loginC} = useContext(StoreContext);
+
   async function criaRecarga() {
     await axios.post(
       "https://sistemaifrj.herokuapp.com/recargas/" + values.matricula2,
       {
         modo_pagto: values.modo,
         valor_recarga: values.saldo2 * 100,
+        id_admin: idC
       }
-    );
+    ).then((response) => {
+      console.log(response)
+    })
+    .catch((error) => {
+      console.log(error)
+    })
   }
 
   async function atualizaSaldo() {
@@ -171,7 +184,14 @@ const CartaoRec = () => {
       {
         saldo: values.saldo3 * 100,
       }
-    );
+    )
+    .then((response) => {
+      console.log(response)
+      console.log(values.saldo3 * 100)
+    })
+    .catch((error) => {
+      console.log(error)
+    })
   }
 
   async function onSubmit(event) {

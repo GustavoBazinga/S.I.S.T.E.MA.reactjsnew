@@ -23,25 +23,6 @@ import TextField from "@material-ui/core/TextField";
 
 
 
-  // root: {
-    
-    
-  //   "& label.Mui-focused": {
-  //     color: "gray",
-  //   },
-  // },
-  
-  // Barr: {
-  //   WebkitAppRegion: "drag",
-  //   flexGrow: 1,
-  //   backgroundColor: "#303030",
-  // },
-  // menuButton: {
-  //   marginRight: theme.spacing(2),
-  // },
-  // title: {
-  //   flexGrow: 1,
-  // },
 
 
 //Função InitialState para iniciar os campos como vazios.
@@ -63,10 +44,9 @@ async function login({ login, senha }) {
 
     //Se login Bem Sucedido, sucess e localToken são atribuidos.
     .then((response) => {
-      console.log(response);
-      console.log(response.data.token);
+      
       sucess = true;
-      localId = response.data.id;
+      localId = response.data.admin.id;
       localToken = response.data.token;
       localLogin = response.data.admin.login;
     })
@@ -79,7 +59,6 @@ async function login({ login, senha }) {
 
   //Se sucess = true, retorna o token de localToken.
   if (sucess) {
-    console.log(localLogin + " SIM");
     return {
       idC: localId,
       loginC: localLogin,
@@ -97,11 +76,7 @@ async function login({ login, senha }) {
 const UserLogin = () => {
 
   const useStyles = makeStyles((theme) => ({
-    root: {
-     
-
-     
-      
+    root: {     
       "& label.Mui-focused": {
         color: "gray",
       },
@@ -112,24 +87,24 @@ const UserLogin = () => {
         },
       },
       
-      
     },
     login:{
       marginLeft:'2ch',
       width:'26ch',
       marginTop:'1ch',
     },
+
     senha:{
       marginLeft:'2ch',
       marginTop:'1ch',
       width:'26ch',
     },
+
     forgetPassword:{
       marginLeft:'17ch',
       color:'gray',
       fontSize:'1.5ch',
     }
-   
   }));
   const [values, setValues] = useState(initialState); //Valores dos campos.
   const [error, setError] = useState(null); //Erro retornado.
@@ -165,11 +140,8 @@ const UserLogin = () => {
     //Se receber error, salva error e reinicia campos.
     setError(error);
     setValues(initialState);
-  }
+  } 
 
-
-
-  
   //Página HTML
   return (
       <div className="page-login">
@@ -194,12 +166,9 @@ const UserLogin = () => {
                 onChange={onChange}
                 label="Login"
                 variant="outlined"
-                className={classes.login}
-                
-              />
-              
+                className={classes.login}               
+              />  
               <TextField
-              
                 id="senha"
                 type="password"
                 label="Senha"
@@ -215,25 +184,20 @@ const UserLogin = () => {
                 </a>
             </div>
               {error && <div className="user-login__error">{error}</div>}
-              
               <div className="enter-app">
                 <IoIosArrowForward
                   size="33px"
                   color="white"
-                  onClick={onSubmit}
-                  
+                  onClick={onSubmit}            
                 />
               </div>
-              
             </form>
-            
           </div>
           <div className="help">
             <BiHelpCircle size="30px" color="white" />
           </div>
         </div>
       </div>
-
   );
 };
 

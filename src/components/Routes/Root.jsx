@@ -22,6 +22,7 @@ import VenAcessos from '../../pages/Seller/VendAcessos.js'
 import DepAdd from '../../pages/Dep/DepAdd.js'
 import DepAlt from '../../pages/Dep/DepAlt.js'
 import Relatorio from '../../pages/Report/relatorio.js'
+import HomeMob from '../../pages/Mobile/HomeMob.js'
 
 
 
@@ -31,6 +32,7 @@ const PagesRoot = () => (
     <StoreProvider>
       <Switch>
         <Route path="/login" component={Login} />
+        <RoutesPrivate path="/mobile" component={HomeMob} />
         <RoutesPrivate path="/admin/add" component={AdminAdd} />
         <RoutesPrivate path="/admin/alt" component={AdminAlt} />
         <RoutesPrivate path="/cartao/add" component={CartaoAdd} />
@@ -46,6 +48,10 @@ const PagesRoot = () => (
         <RoutesPrivate path="/departamento/alt" component={DepAlt}/>
         <RoutesPrivate path="/rep" component={Relatorio}/>
         <RoutesPrivate path="/" component={Home} />
+        {/* <RoutesPrivate path="/vendas" componente = {VendaMob}/> */}
+        
+
+        
       </Switch>
     </StoreProvider>
   </Router>
